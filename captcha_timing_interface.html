@@ -1130,6 +1130,7 @@
         }
         
         function startTimer1() {
+            document.getElementById('captcha1-link').href = CONFIG.captcha1Url;
             if (!studyData.captcha1StartTime) {
                 studyData.captcha1StartTime = new Date();
                 document.getElementById('timer1-display').style.display = 'block';
@@ -1167,6 +1168,7 @@
         }
         
         function startTimer2() {
+            document.getElementById('captcha2-link').href = CONFIG.captcha2Url;
             if (!studyData.captcha2StartTime) {
                 studyData.captcha2StartTime = new Date();
                 document.getElementById('timer2-display').style.display = 'block';
