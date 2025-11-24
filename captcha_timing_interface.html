@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CAPTCHA UX Study - Testing Interface</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #f5e6d3 0%, #d4a5a5 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #8b4513 0%, #a0522d 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .header p {
+            opacity: 0.95;
+            font-size: 16px;
+        }
+        
+        .content {
+            padding: 40px;
+        }
+        
+        .phase {
+            display: none;
+        }
+        
+        .phase.active {
+            display: block;
+            animation: fadeIn 0.3s ease-in;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .instructions {
+            background: #fff8e1;
+            border-left: 4px solid #ffa726;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 4px;
+        }
+        
+        .instructions h3 {
+            color: #e65100;
+            margin-bottom: 10px;
+            font-size: 18px;
+        }
+        
+        .instructions ul {
+            margin-left: 20px;
+            line-height: 1.8;
+        }
+        
+        .timer-display {
+            text-align: center;
+            margin: 30px 0;
+            padding: 30px;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            border-radius: 8px;
+        }
+        
+        .timer-display .time {
+            font-size: 48px;
+            font-weight: bold;
+            color: #8b4513;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+        }
+        
+        .timer-display .label {
+            color: #666;
+            font-size: 14px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .captcha-link {
+            display: block;
+            background: #8b4513;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 20px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .captcha-link:hover {
+            background: #a0522d;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
+        }
+        
+        .captcha-link.control {
+            background: #607d8b;
+        }
+        
+        .captcha-link.control:hover {
+            background: #546e7a;
+        }
+        
+        .btn {
+            background: #8b4513;
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .btn:hover {
+            background: #a0522d;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
+        }
+        
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .btn-secondary {
+            background: #607d8b;
+        }
+        
+        .btn-secondary:hover {
+            background: #546e7a;
+        }
+        
+        .button-group {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .participant-id {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            text-align: center;
+            font-weight: bold;
+            color: #1976d2;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        
+        .form-group input:focus {
+            outline: none;
+            border-color: #8b4513;
+        }
+        
+        .results-summary {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+        }
+        
+        .results-summary h4 {
+            color: #8b4513;
+            margin-bottom: 15px;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-label {
+            font-weight: 600;
+        }
+        
+        .result-value {
+            color: #8b4513;
+            font-family: 'Courier New', monospace;
+            font-weight: bold;
+        }
+        
+        .progress-bar {
+            background: #e0e0e0;
+            height: 8px;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .progress-fill {
+            background: linear-gradient(90deg, #8b4513 0%, #d4a5a5 100%);
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+        
+        .countdown {
+            font-size: 24px;
+            color: #d32f2f;
+            font-weight: bold;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-indicator.ready {
+            background: #4caf50;
+        }
+        
+        .status-indicator.testing {
+            background: #ff9800;
+            animation: pulse 1.5s infinite;
+        }
+        
+        .status-indicator.complete {
+            background: #2196f3;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+        
+        .copy-btn {
+            background: #4caf50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-left: 10px;
+        }
+        
+        .copy-btn:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>CAPTCHA Accessibility & Usability Study</h1>
+            <p>Helping us make CAPTCHAs easy, accessible, and time-efficient for everyone</p>
+        </div>
+        
+        <div class="content">
+            <!-- Phase 0: Welcome & Setup -->
+            <div id="phase-0" class="phase active">
+                <div class="instructions">
+                    <h3>📋 Welcome to Our Study!</h3>
+                    <p>Thank you for participating in our CAPTCHA usability research. This study will take approximately 10-15 minutes.</p>
+                </div>
+                
+                <h3 style="margin-bottom: 15px;">Study Overview:</h3>
+                <ul style="margin-left: 20px; line-height: 2; margin-bottom: 30px;">
+                    <li>You'll test two different CAPTCHA systems</li>
+                    <li>We'll automatically time how long each takes</li>
+                    <li>You'll answer questions about your experience</li>
+                    <li>All responses are anonymous</li>
+                </ul>
+                
+                <div class="form-group">
+                    <label>Enter your email (optional, for follow-up):</label>
+                    <input type="email" id="participant-email" placeholder="your.email@example.com">
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn" onclick="startStudy()">Begin Study</button>
+                </div>
+            </div>
+            
+            <!-- Phase 1: Control CAPTCHA -->
+            <div id="phase-1" class="phase">
+                <div class="participant-id">
+                    <span class="status-indicator ready"></span>
+                    Participant ID: <span id="pid-display-1"></span>
+                    <button class="copy-btn" onclick="copyParticipantId()">Copy ID</button>
+                </div>
+                
+                <div class="instructions">
+                    <h3>🔒 Control CAPTCHA Test (Traditional System)</h3>
+                    <ul>
+                        <li>Click "Open Control CAPTCHA" below</li>
+                        <li>Complete the CAPTCHA as you normally would</li>
+                        <li>Timer will start when you click the link</li>
+                        <li>Return here and click "I've Completed It" when done</li>
+                    </ul>
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 33%"></div>
+                </div>
+                
+                <a href="#" id="control-captcha-link" class="captcha-link control" target="_blank" onclick="startControlTimer()">
+                    🔗 Open Control CAPTCHA (Traditional)
+                </a>
+                
+                <div class="timer-display" id="control-timer" style="display: none;">
+                    <div class="label">Time Elapsed</div>
+                    <div class="time" id="control-time">00:00</div>
+                    <div class="label"><span class="status-indicator testing"></span>Testing in Progress...</div>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn" id="control-complete-btn" onclick="completeControlTest()" disabled>
+                        ✓ I've Completed It
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Phase 2: Test CAPTCHA -->
+            <div id="phase-2" class="phase">
+                <div class="participant-id">
+                    <span class="status-indicator ready"></span>
+                    Participant ID: <span id="pid-display-2"></span>
+                    <button class="copy-btn" onclick="copyParticipantId()">Copy ID</button>
+                </div>
+                
+                <div class="instructions">
+                    <h3>🆕 Alternative CAPTCHA Test (New System)</h3>
+                    <ul>
+                        <li>Click "Open Alternative CAPTCHA" below</li>
+                        <li>Complete the CAPTCHA</li>
+                        <li>Timer will start when you click the link</li>
+                        <li>Return here and click "I've Completed It" when done</li>
+                    </ul>
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 66%"></div>
+                </div>
+                
+                <a href="#" id="test-captcha-link" class="captcha-link" target="_blank" onclick="startTestTimer()">
+                    🔗 Open Alternative CAPTCHA (New Design)
+                </a>
+                
+                <div class="timer-display" id="test-timer" style="display: none;">
+                    <div class="label">Time Elapsed</div>
+                    <div class="time" id="test-time">00:00</div>
+                    <div class="label"><span class="status-indicator testing"></span>Testing in Progress...</div>
+                </div>
+                
+                <div class="button-group">
+                    <button class="btn" id="test-complete-btn" onclick="completeTestTest()" disabled>
+                        ✓ I've Completed It
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Phase 3: Survey -->
+            <div id="phase-3" class="phase">
+                <div class="participant-id">
+                    <span class="status-indicator complete"></span>
+                    Participant ID: <span id="pid-display-3"></span>
+                    <button class="copy-btn" onclick="copyParticipantId()">Copy ID</button>
+                </div>
+                
+                <div class="instructions">
+                    <h3>📊 Final Step: Complete the Survey</h3>
+                    <p>You've completed both CAPTCHA tests! Here are your timing results:</p>
+                </div>
+                
+                <div class="progress-bar">
+                    <div class="progress-fill" style="width: 100%"></div>
+                </div>
+                
+                <div class="results-summary">
+                    <h4>⏱️ Your Results:</h4>
+                    <div class="result-item">
+                        <span class="result-label">Control CAPTCHA Time:</span>
+                        <span class="result-value" id="final-control-time"></span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Alternative CAPTCHA Time:</span>
+                        <span class="result-value" id="final-test-time"></span>
+                    </div>
+                    <div class="result-item">
+                        <span class="result-label">Time Difference:</span>
+                        <span class="result-value" id="time-difference"></span>
+                    </div>
+                </div>
+                
+                <div style="background: #e3f2fd; padding: 20px; border-radius: 8px; margin: 20px 0;">
+                    <p style="margin-bottom: 15px;"><strong>Important:</strong> Please use your <strong>Participant ID</strong> when filling out the survey. This will be automatically filled in the survey link below.</p>
+                    <p>The survey includes questions about:</p>
+                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
+                        <li>Ten Usability Heuristics evaluation</li>
+                        <li>Likert scale questions on accessibility and user experience</li>
+                        <li>Open-ended feedback</li>
+                    </ul>
+                </div>
+                
+                <a href="#" id="survey-link" class="captcha-link" target="_blank">
+                    📝 Open Survey (Google Forms)
+                </a>
+                
+                <div class="button-group">
+                    <button class="btn btn-secondary" onclick="downloadResults()">
+                        💾 Download Your Results (Optional)
+                    </button>
+                </div>
+                
+                <div style="text-align: center; margin-top: 30px; color: #666; font-size: 14px;">
+                    <p>Thank you for your participation! Your feedback helps us create more accessible CAPTCHAs.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Configuration - Replace these with your actual links
+        const CONFIG = {
+            controlCaptchaUrl: 'YOUR_FIGMA_CONTROL_CAPTCHA_LINK',
+            testCaptchaUrl: 'YOUR_FIGMA_TEST_CAPTCHA_LINK',
+            surveyBaseUrl: 'YOUR_GOOGLE_FORMS_LINK'
+        };
+        
+        // Study data
+        let studyData = {
+            participantId: '',
+            email: '',
+            controlStartTime: null,
+            controlEndTime: null,
+            controlDuration: 0,
+            testStartTime: null,
+            testEndTime: null,
+            testDuration: 0,
+            timestamp: new Date().toISOString()
+        };
+        
+        let controlInterval, testInterval;
+        
+        // Generate unique participant ID
+        function generateParticipantId() {
+            const timestamp = Date.now().toString(36);
+            const random = Math.random().toString(36).substring(2, 7);
+            return `P-${timestamp}-${random}`.toUpperCase();
+        }
+        
+        // Format time in MM:SS
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = seconds % 60;
+            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+        }
+        
+        // Start the study
+        function startStudy() {
+            studyData.participantId = generateParticipantId();
+            studyData.email = document.getElementById('participant-email').value;
+            
+            // Update all participant ID displays
+            document.getElementById('pid-display-1').textContent = studyData.participantId;
+            document.getElementById('pid-display-2').textContent = studyData.participantId;
+            document.getElementById('pid-display-3').textContent = studyData.participantId;
+            
+            // Set CAPTCHA links
+            document.getElementById('control-captcha-link').href = CONFIG.controlCaptchaUrl;
+            document.getElementById('test-captcha-link').href = CONFIG.testCaptchaUrl;
+            
+            showPhase(1);
+        }
+        
+        // Control CAPTCHA timer
+        function startControlTimer() {
+            if (!studyData.controlStartTime) {
+                studyData.controlStartTime = new Date();
+                document.getElementById('control-timer').style.display = 'block';
+                document.getElementById('control-complete-btn').disabled = false;
+                
+                let seconds = 0;
+                controlInterval = setInterval(() => {
+                    seconds++;
+                    studyData.controlDuration = seconds;
+                    document.getElementById('control-time').textContent = formatTime(seconds);
+                }, 1000);
+            }
+        }
+        
+        function completeControlTest() {
+            studyData.controlEndTime = new Date();
+            clearInterval(controlInterval);
+            showPhase(2);
+        }
+        
+        // Test CAPTCHA timer
+        function startTestTimer() {
+            if (!studyData.testStartTime) {
+                studyData.testStartTime = new Date();
+                document.getElementById('test-timer').style.display = 'block';
+                document.getElementById('test-complete-btn').disabled = false;
+                
+                let seconds = 0;
+                testInterval = setInterval(() => {
+                    seconds++;
+                    studyData.testDuration = seconds;
+                    document.getElementById('test-time').textContent = formatTime(seconds);
+                }, 1000);
+            }
+        }
+        
+        function completeTestTest() {
+            studyData.testEndTime = new Date();
+            clearInterval(testInterval);
+            showSurvey();
+        }
+        
+        // Show survey with results
+        function showSurvey() {
+            document.getElementById('final-control-time').textContent = formatTime(studyData.controlDuration);
+            document.getElementById('final-test-time').textContent = formatTime(studyData.testDuration);
+            
+            const diff = studyData.testDuration - studyData.controlDuration;
+            const diffText = diff > 0 
+                ? `+${formatTime(Math.abs(diff))} slower`
+                : `-${formatTime(Math.abs(diff))} faster`;
+            document.getElementById('time-difference').textContent = diffText;
+            
+            // Create survey link with pre-filled data
+            const surveyUrl = `${CONFIG.surveyBaseUrl}?entry.participant_id=${encodeURIComponent(studyData.participantId)}&entry.control_time=${studyData.controlDuration}&entry.test_time=${studyData.testDuration}`;
+            document.getElementById('survey-link').href = surveyUrl;
+            
+            showPhase(3);
+            
+            // Save to localStorage
+            saveResults();
+        }
+        
+        // Phase navigation
+        function showPhase(phaseNum) {
+            document.querySelectorAll('.phase').forEach(phase => {
+                phase.classList.remove('active');
+            });
+            document.getElementById(`phase-${phaseNum}`).classList.add('active');
+            window.scrollTo(0, 0);
+        }
+        
+        // Copy participant ID
+        function copyParticipantId() {
+            navigator.clipboard.writeText(studyData.participantId);
+            alert('Participant ID copied to clipboard!');
+        }
+        
+        // Save results to localStorage
+        function saveResults() {
+            const results = JSON.parse(localStorage.getItem('captchaStudyResults') || '[]');
+            results.push(studyData);
+            localStorage.setItem('captchaStudyResults', JSON.stringify(results));
+        }
+        
+        // Download results
+        function downloadResults() {
+            const data = JSON.stringify(studyData, null, 2);
+            const blob = new Blob([data], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `captcha-study-${studyData.participantId}.json`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }
+    </script>
+</body>
+</html>
