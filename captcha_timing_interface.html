@@ -3,8 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CAPTCHA UX Study - Testing Interface</title>
+    <title>CAPTCHA Usability Research Study</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        
         * {
             margin: 0;
             padding: 0;
@@ -12,40 +14,45 @@
         }
         
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #f5e6d3 0%, #d4a5a5 100%);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #0a0e27;
+            color: #e4e4e7;
             min-height: 100vh;
-            padding: 20px;
+            line-height: 1.6;
         }
         
         .container {
-            max-width: 900px;
+            max-width: 800px;
             margin: 0 auto;
-            background: white;
+            padding: 40px 20px;
+        }
+        
+        .card {
+            background: #1a1f3a;
+            border: 2px solid #2d3354;
             border-radius: 12px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+            padding: 40px;
+            margin-bottom: 30px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
         }
         
         .header {
-            background: linear-gradient(135deg, #8b4513 0%, #a0522d 100%);
-            color: white;
-            padding: 30px;
             text-align: center;
+            margin-bottom: 50px;
         }
         
         .header h1 {
-            font-size: 28px;
-            margin-bottom: 10px;
+            font-size: 32px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
         }
         
-        .header p {
-            opacity: 0.95;
+        .header .subtitle {
             font-size: 16px;
-        }
-        
-        .content {
-            padding: 40px;
+            color: #9ca3af;
+            font-weight: 400;
         }
         
         .phase {
@@ -54,579 +61,1217 @@
         
         .phase.active {
             display: block;
-            animation: fadeIn 0.3s ease-in;
+            animation: fadeIn 0.4s ease-out;
         }
         
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
-        .instructions {
-            background: #fff8e1;
-            border-left: 4px solid #ffa726;
-            padding: 20px;
-            margin-bottom: 30px;
-            border-radius: 4px;
+        h2 {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 20px;
+            border-bottom: 3px solid #3b82f6;
+            padding-bottom: 12px;
         }
         
-        .instructions h3 {
-            color: #e65100;
-            margin-bottom: 10px;
-            font-size: 18px;
-        }
-        
-        .instructions ul {
-            margin-left: 20px;
-            line-height: 1.8;
-        }
-        
-        .timer-display {
-            text-align: center;
-            margin: 30px 0;
-            padding: 30px;
-            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
-            border-radius: 8px;
-        }
-        
-        .timer-display .time {
-            font-size: 48px;
-            font-weight: bold;
-            color: #8b4513;
-            font-family: 'Courier New', monospace;
-            margin: 10px 0;
-        }
-        
-        .timer-display .label {
-            color: #666;
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-        
-        .captcha-link {
-            display: block;
-            background: #8b4513;
-            color: white;
-            text-align: center;
-            padding: 20px;
-            border-radius: 8px;
-            text-decoration: none;
+        h3 {
             font-size: 18px;
             font-weight: 600;
-            margin: 20px 0;
-            transition: all 0.3s ease;
+            color: #e4e4e7;
+            margin-top: 25px;
+            margin-bottom: 15px;
         }
         
-        .captcha-link:hover {
-            background: #a0522d;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
+        p {
+            margin-bottom: 16px;
+            color: #d1d5db;
+            font-size: 15px;
         }
         
-        .captcha-link.control {
-            background: #607d8b;
+        .info-box {
+            background: #0f172a;
+            border-left: 4px solid #3b82f6;
+            padding: 20px;
+            margin: 25px 0;
+            border-radius: 6px;
         }
         
-        .captcha-link.control:hover {
-            background: #546e7a;
+        .info-box.warning {
+            border-left-color: #f59e0b;
+            background: #1e1a0f;
+        }
+        
+        .info-box.success {
+            border-left-color: #10b981;
+            background: #0f1e1a;
+        }
+        
+        ul {
+            margin-left: 25px;
+            margin-bottom: 20px;
+            color: #d1d5db;
+        }
+        
+        li {
+            margin-bottom: 12px;
+            line-height: 1.7;
         }
         
         .btn {
-            background: #8b4513;
-            color: white;
+            display: inline-block;
+            background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+            color: #ffffff;
             border: none;
-            padding: 15px 40px;
+            padding: 16px 40px;
             font-size: 16px;
+            font-weight: 600;
             border-radius: 8px;
             cursor: pointer;
-            font-weight: 600;
             transition: all 0.3s ease;
-            display: inline-block;
+            text-decoration: none;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
         }
         
         .btn:hover {
-            background: #a0522d;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(139, 69, 19, 0.3);
+            box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
         }
         
         .btn:disabled {
-            background: #ccc;
+            background: #374151;
             cursor: not-allowed;
             transform: none;
+            box-shadow: none;
         }
         
         .btn-secondary {
-            background: #607d8b;
+            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
         }
         
         .btn-secondary:hover {
-            background: #546e7a;
+            background: linear-gradient(135deg, #4f46e5 0%, #4338ca 100%);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.4);
+        }
+        
+        .btn-large {
+            width: 100%;
+            padding: 20px;
+            font-size: 18px;
+            margin: 15px 0;
         }
         
         .button-group {
             text-align: center;
-            margin-top: 30px;
+            margin-top: 35px;
         }
         
-        .participant-id {
-            background: #e3f2fd;
-            border: 2px solid #2196f3;
-            padding: 15px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            text-align: center;
-            font-weight: bold;
-            color: #1976d2;
-        }
-        
-        .form-group {
-            margin-bottom: 20px;
-        }
-        
-        .form-group label {
-            display: block;
-            margin-bottom: 8px;
-            font-weight: 600;
-            color: #333;
-        }
-        
-        .form-group input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            font-size: 16px;
-        }
-        
-        .form-group input:focus {
-            outline: none;
-            border-color: #8b4513;
-        }
-        
-        .results-summary {
-            background: #f5f5f5;
-            padding: 20px;
-            border-radius: 8px;
-            margin: 20px 0;
-        }
-        
-        .results-summary h4 {
-            color: #8b4513;
-            margin-bottom: 15px;
-        }
-        
-        .result-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
-        }
-        
-        .result-item:last-child {
-            border-bottom: none;
-        }
-        
-        .result-label {
-            font-weight: 600;
-        }
-        
-        .result-value {
-            color: #8b4513;
-            font-family: 'Courier New', monospace;
-            font-weight: bold;
+        .progress-container {
+            margin: 30px 0;
         }
         
         .progress-bar {
-            background: #e0e0e0;
+            background: #0f172a;
             height: 8px;
             border-radius: 4px;
-            margin: 20px 0;
             overflow: hidden;
+            border: 1px solid #2d3354;
         }
         
         .progress-fill {
-            background: linear-gradient(90deg, #8b4513 0%, #d4a5a5 100%);
+            background: linear-gradient(90deg, #3b82f6 0%, #8b5cf6 100%);
             height: 100%;
-            transition: width 0.3s ease;
+            transition: width 0.5s ease;
+            box-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
         }
         
-        .countdown {
+        .progress-text {
+            text-align: center;
+            margin-top: 10px;
+            font-size: 14px;
+            color: #9ca3af;
+            font-weight: 500;
+        }
+        
+        .participant-id-display {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 2px solid #3b82f6;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 25px 0;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.2);
+        }
+        
+        .participant-id-display .label {
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1.5px;
+            color: #9ca3af;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .participant-id-display .id {
             font-size: 24px;
-            color: #d32f2f;
-            font-weight: bold;
+            font-weight: 700;
+            color: #3b82f6;
+            font-family: 'Courier New', monospace;
+            letter-spacing: 1px;
+        }
+        
+        .timer-display {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+            padding: 30px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 30px 0;
+            border: 2px solid #2d3354;
+        }
+        
+        .timer-display .time {
+            font-size: 56px;
+            font-weight: 700;
+            color: #3b82f6;
+            font-family: 'Courier New', monospace;
+            margin: 15px 0;
+            text-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+        
+        .timer-display .label {
+            font-size: 13px;
+            color: #9ca3af;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: 600;
+        }
+        
+        .captcha-button {
+            display: block;
+            width: 100%;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 3px solid #3b82f6;
+            color: #ffffff;
+            padding: 30px;
+            border-radius: 12px;
+            font-size: 20px;
+            font-weight: 700;
+            text-decoration: none;
             text-align: center;
             margin: 20px 0;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            box-shadow: 0 4px 16px rgba(59, 130, 246, 0.2);
+        }
+        
+        .captcha-button:hover {
+            background: linear-gradient(135deg, #2d3354 0%, #1e293b 100%);
+            border-color: #60a5fa;
+            transform: translateY(-3px);
+            box-shadow: 0 8px 24px rgba(59, 130, 246, 0.4);
         }
         
         .status-indicator {
             display: inline-block;
-            width: 12px;
-            height: 12px;
+            width: 10px;
+            height: 10px;
             border-radius: 50%;
-            margin-right: 8px;
+            margin-right: 10px;
+            animation: pulse 2s infinite;
         }
         
-        .status-indicator.ready {
-            background: #4caf50;
-        }
-        
-        .status-indicator.testing {
-            background: #ff9800;
-            animation: pulse 1.5s infinite;
-        }
-        
-        .status-indicator.complete {
-            background: #2196f3;
+        .status-indicator.active {
+            background: #10b981;
+            box-shadow: 0 0 10px rgba(16, 185, 129, 0.5);
         }
         
         @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
+            0%, 100% {
+                opacity: 1;
+            }
+            50% {
+                opacity: 0.5;
+            }
         }
         
-        .copy-btn {
-            background: #4caf50;
-            color: white;
-            border: none;
-            padding: 8px 16px;
-            border-radius: 4px;
-            cursor: pointer;
-            font-size: 14px;
-            margin-left: 10px;
+        .step-indicator {
+            display: flex;
+            justify-content: space-between;
+            margin: 40px 0;
+            position: relative;
         }
         
-        .copy-btn:hover {
-            background: #45a049;
+        .step-indicator::before {
+            content: '';
+            position: absolute;
+            top: 20px;
+            left: 0;
+            right: 0;
+            height: 2px;
+            background: #2d3354;
+            z-index: 0;
+        }
+        
+        .step {
+            flex: 1;
+            text-align: center;
+            position: relative;
+            z-index: 1;
+        }
+        
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #1a1f3a;
+            border: 2px solid #2d3354;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-weight: 700;
+            transition: all 0.3s ease;
+        }
+        
+        .step.active .step-circle {
+            background: #3b82f6;
+            border-color: #3b82f6;
+            box-shadow: 0 0 20px rgba(59, 130, 246, 0.5);
+        }
+        
+        .step.completed .step-circle {
+            background: #10b981;
+            border-color: #10b981;
+        }
+        
+        .step-label {
+            font-size: 12px;
+            color: #9ca3af;
+            font-weight: 500;
+        }
+        
+        .step.active .step-label {
+            color: #3b82f6;
+            font-weight: 600;
+        }
+        
+        .summary-box {
+            background: #0f172a;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 25px 0;
+            border: 2px solid #2d3354;
+        }
+        
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px 0;
+            border-bottom: 1px solid #2d3354;
+        }
+        
+        .summary-item:last-child {
+            border-bottom: none;
+        }
+        
+        .summary-label {
+            font-weight: 600;
+            color: #d1d5db;
+        }
+        
+        .summary-value {
+            font-weight: 700;
+            color: #3b82f6;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .divider {
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #2d3354, transparent);
+            margin: 30px 0;
+        }
+        
+        .badge {
+            display: inline-block;
+            background: #1e293b;
+            color: #3b82f6;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 13px;
+            font-weight: 600;
+            border: 1px solid #2d3354;
+            margin: 5px;
+        }
+        
+        .countdown {
+            font-size: 18px;
+            color: #f59e0b;
+            font-weight: 700;
+            text-align: center;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px 15px;
+            }
+            
+            .card {
+                padding: 25px 20px;
+            }
+            
+            .header h1 {
+                font-size: 26px;
+            }
+            
+            h2 {
+                font-size: 20px;
+            }
+            
+            .timer-display .time {
+                font-size: 42px;
+            }
+            
+            .captcha-button {
+                padding: 20px;
+                font-size: 18px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>CAPTCHA Accessibility & Usability Study</h1>
-            <p>Helping us make CAPTCHAs easy, accessible, and time-efficient for everyone</p>
+            <h1>CAPTCHA Usability Research Study</h1>
+            <p class="subtitle">Human-Computer Interaction Research</p>
         </div>
         
-        <div class="content">
-            <!-- Phase 0: Welcome & Setup -->
-            <div id="phase-0" class="phase active">
-                <div class="instructions">
-                    <h3>📋 Welcome to Our Study!</h3>
-                    <p>Thank you for participating in our CAPTCHA usability research. This study will take approximately 10-15 minutes.</p>
+        <!-- Phase 0: Welcome & Instructions -->
+        <div id="phase-0" class="phase active">
+            <div class="card">
+                <h2>Welcome to Our Study</h2>
+                
+                <p>Thank you for participating in our research on CAPTCHA usability and accessibility. Your feedback will help improve security systems for everyone.</p>
+                
+                <div class="info-box">
+                    <h3>📊 Study Overview</h3>
+                    <p><strong>Total Time:</strong> Approximately 15 minutes</p>
+                    <p><strong>Purpose:</strong> Evaluate and compare different CAPTCHA systems</p>
                 </div>
                 
-                <h3 style="margin-bottom: 15px;">Study Overview:</h3>
-                <ul style="margin-left: 20px; line-height: 2; margin-bottom: 30px;">
-                    <li>You'll test two different CAPTCHA systems</li>
-                    <li>We'll automatically time how long each takes</li>
-                    <li>You'll answer questions about your experience</li>
-                    <li>All responses are anonymous</li>
+                <h3>What You'll Do</h3>
+                <ol style="margin-left: 25px; color: #d1d5db;">
+                    <li><strong>Pre-Study Survey</strong> - Share your demographics and initial thoughts about CAPTCHAs (3 minutes)</li>
+                    <li><strong>CAPTCHA Test #1</strong> - Complete a CAPTCHA system (timed)</li>
+                    <li><strong>Feedback Survey #1</strong> - Rate your experience (2 minutes)</li>
+                    <li><strong>CAPTCHA Test #2</strong> - Complete a different CAPTCHA system (timed)</li>
+                    <li><strong>Feedback Survey #2</strong> - Rate your experience (2 minutes)</li>
+                    <li><strong>Final Survey</strong> - Compare both systems (3 minutes)</li>
+                </ol>
+                
+                <div class="info-box warning">
+                    <h3>⚠️ Important Notes</h3>
+                    <ul style="margin-left: 20px;">
+                        <li><strong>Do not refresh the page</strong> during the study - your progress may be lost</li>
+                        <li><strong>Complete in one sitting</strong> - Takes about 15 minutes total</li>
+                        <li><strong>Use a desktop or laptop</strong> for best experience (mobile works but may be harder)</li>
+                        <li><strong>Keep your Participant ID</strong> - You'll need it for all surveys</li>
+                    </ul>
+                </div>
+                
+                <h3>Your Rights as a Participant</h3>
+                <ul>
+                    <li>Your participation is completely voluntary</li>
+                    <li>You may withdraw at any time without penalty</li>
+                    <li>Your responses are confidential and anonymous</li>
+                    <li>Your data will be stored securely and used only for research purposes</li>
+                    <li>No personally identifying information will be published</li>
                 </ul>
                 
-                <div class="form-group">
-                    <label>Enter your email (optional, for follow-up):</label>
-                    <input type="email" id="participant-email" placeholder="your.email@example.com">
+                <div class="info-box success">
+                    <h3>✓ By Clicking "Begin Study" Below, You Confirm:</h3>
+                    <ul style="margin-left: 20px;">
+                        <li>You have read and understood this information</li>
+                        <li>You consent to participate in this research study</li>
+                        <li>You understand you can withdraw at any time</li>
+                    </ul>
                 </div>
                 
                 <div class="button-group">
-                    <button class="btn" onclick="startStudy()">Begin Study</button>
+                    <button class="btn btn-large" onclick="startPreSurvey()">Begin Study →</button>
                 </div>
             </div>
-            
-            <!-- Phase 1: Control CAPTCHA -->
-            <div id="phase-1" class="phase">
-                <div class="participant-id">
-                    <span class="status-indicator ready"></span>
-                    Participant ID: <span id="pid-display-1"></span>
-                    <button class="copy-btn" onclick="copyParticipantId()">Copy ID</button>
+        </div>
+        
+        <!-- Phase 1: Pre-Study Survey -->
+        <div id="phase-1" class="phase">
+            <div class="card">
+                <div class="step-indicator">
+                    <div class="step active">
+                        <div class="step-circle">1</div>
+                        <div class="step-label">Pre-Survey</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-circle">2</div>
+                        <div class="step-label">Test #1</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-circle">3</div>
+                        <div class="step-label">Test #2</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-circle">4</div>
+                        <div class="step-label">Complete</div>
+                    </div>
                 </div>
                 
-                <div class="instructions">
-                    <h3>🔒 Control CAPTCHA Test (Traditional System)</h3>
-                    <ul>
-                        <li>Click "Open Control CAPTCHA" below</li>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 10%"></div>
+                    </div>
+                    <div class="progress-text">Step 1 of 6</div>
+                </div>
+                
+                <h2>Step 1: Pre-Study Survey</h2>
+                
+                <div class="participant-id-display">
+                    <div class="label">Your Participant ID</div>
+                    <div class="id" id="pid-display-1"></div>
+                </div>
+                
+                <div class="info-box">
+                    <p><strong>⚠️ IMPORTANT:</strong> Copy your Participant ID above. You'll need to enter it in each survey.</p>
+                </div>
+                
+                <p>Before testing the CAPTCHA systems, we'd like to learn about your background and initial thoughts about CAPTCHAs.</p>
+                
+                <p>This survey asks about:</p>
+                <ul>
+                    <li>Your age range</li>
+                    <li>Your email (optional, for follow-up)</li>
+                    <li>Any accessibility needs or assistive technologies you use</li>
+                    <li>Your general opinions about CAPTCHAs</li>
+                    <li>Any issues you typically encounter with CAPTCHAs</li>
+                </ul>
+                
+                <p><strong>Estimated time:</strong> 3 minutes</p>
+                
+                <a href="#" id="pre-survey-link" class="btn btn-large" target="_blank" onclick="trackPreSurveyStart()">
+                    Open Pre-Study Survey →
+                </a>
+                
+                <div class="divider"></div>
+                
+                <p style="text-align: center; color: #9ca3af;">After completing the survey, return here and click below:</p>
+                
+                <div class="button-group">
+                    <button class="btn btn-secondary" onclick="startCaptchaTest1()">I've Completed the Pre-Survey →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Phase 2: CAPTCHA Test #1 -->
+        <div id="phase-2" class="phase">
+            <div class="card">
+                <div class="step-indicator">
+                    <div class="step completed">
+                        <div class="step-circle">✓</div>
+                        <div class="step-label">Pre-Survey</div>
+                    </div>
+                    <div class="step active">
+                        <div class="step-circle">2</div>
+                        <div class="step-label">Test #1</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-circle">3</div>
+                        <div class="step-label">Test #2</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-circle">4</div>
+                        <div class="step-label">Complete</div>
+                    </div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 35%"></div>
+                    </div>
+                    <div class="progress-text">Step 2 of 6</div>
+                </div>
+                
+                <h2>CAPTCHA System Test #1</h2>
+                
+                <div class="participant-id-display">
+                    <div class="label">Your Participant ID</div>
+                    <div class="id" id="pid-display-2"></div>
+                </div>
+                
+                <div class="info-box">
+                    <h3>📋 Instructions</h3>
+                    <ol style="margin-left: 20px;">
+                        <li>Click the button below to open the CAPTCHA system</li>
                         <li>Complete the CAPTCHA as you normally would</li>
-                        <li>Timer will start when you click the link</li>
-                        <li>Return here and click "I've Completed It" when done</li>
-                    </ul>
+                        <li><strong>The timer starts automatically</strong> when you click the button</li>
+                        <li>Return to this page when you're done</li>
+                        <li>Click "I've Completed It" to continue</li>
+                    </ol>
                 </div>
                 
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 33%"></div>
+                <div class="info-box warning">
+                    <p><strong>Note:</strong> This CAPTCHA system is unlabeled. Just complete it normally - we'll ask for your feedback afterward.</p>
                 </div>
                 
-                <a href="#" id="control-captcha-link" class="captcha-link control" target="_blank" onclick="startControlTimer()">
-                    🔗 Open Control CAPTCHA (Traditional)
+                <a href="#" id="captcha1-link" class="captcha-button" target="_blank" onclick="startTimer1()">
+                    <span class="status-indicator active"></span>
+                    Open CAPTCHA System #1
                 </a>
                 
-                <div class="timer-display" id="control-timer" style="display: none;">
+                <div class="timer-display" id="timer1-display" style="display: none;">
                     <div class="label">Time Elapsed</div>
-                    <div class="time" id="control-time">00:00</div>
-                    <div class="label"><span class="status-indicator testing"></span>Testing in Progress...</div>
+                    <div class="time" id="timer1-time">00:00</div>
+                    <div class="label"><span class="status-indicator active"></span>Timer Running...</div>
                 </div>
                 
                 <div class="button-group">
-                    <button class="btn" id="control-complete-btn" onclick="completeControlTest()" disabled>
-                        ✓ I've Completed It
+                    <button class="btn btn-large" id="captcha1-complete-btn" onclick="completeCaptcha1()" disabled>
+                        I've Completed It →
                     </button>
                 </div>
             </div>
-            
-            <!-- Phase 2: Test CAPTCHA -->
-            <div id="phase-2" class="phase">
-                <div class="participant-id">
-                    <span class="status-indicator ready"></span>
-                    Participant ID: <span id="pid-display-2"></span>
-                    <button class="copy-btn" onclick="copyParticipantId()">Copy ID</button>
+        </div>
+        
+        <!-- Phase 3: Survey #1 -->
+        <div id="phase-3" class="phase">
+            <div class="card">
+                <div class="step-indicator">
+                    <div class="step completed">
+                        <div class="step-circle">✓</div>
+                        <div class="step-label">Pre-Survey</div>
+                    </div>
+                    <div class="step completed">
+                        <div class="step-circle">✓</div>
+                        <div class="step-label">Test #1</div>
+                    </div>
+                    <div class="step active">
+                        <div class="step-circle">3</div>
+                        <div class="step-label">Test #2</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-circle">4</div>
+                        <div class="step-label">Complete</div>
+                    </div>
                 </div>
                 
-                <div class="instructions">
-                    <h3>🆕 Alternative CAPTCHA Test (New System)</h3>
-                    <ul>
-                        <li>Click "Open Alternative CAPTCHA" below</li>
-                        <li>Complete the CAPTCHA</li>
-                        <li>Timer will start when you click the link</li>
-                        <li>Return here and click "I've Completed It" when done</li>
-                    </ul>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 50%"></div>
+                    </div>
+                    <div class="progress-text">Step 3 of 6</div>
                 </div>
                 
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 66%"></div>
+                <h2>Feedback Survey - System #1</h2>
+                
+                <div class="participant-id-display">
+                    <div class="label">Your Participant ID</div>
+                    <div class="id" id="pid-display-3"></div>
                 </div>
                 
-                <a href="#" id="test-captcha-link" class="captcha-link" target="_blank" onclick="startTestTimer()">
-                    🔗 Open Alternative CAPTCHA (New Design)
+                <div class="summary-box">
+                    <h3>Your Completion Time:</h3>
+                    <div class="summary-item">
+                        <span class="summary-label">CAPTCHA System #1</span>
+                        <span class="summary-value" id="time1-display"></span>
+                    </div>
+                </div>
+                
+                <p>Now we'd like your immediate feedback about the CAPTCHA system you just completed.</p>
+                
+                <p>This survey includes:</p>
+                <ul>
+                    <li>Ease of completion rating</li>
+                    <li>Time efficiency rating</li>
+                    <li>Frustration level</li>
+                    <li>Instructions clarity</li>
+                    <li>Visual clarity and design</li>
+                    <li>Any specific issues you encountered</li>
+                </ul>
+                
+                <p><strong>Estimated time:</strong> 2 minutes</p>
+                
+                <div class="info-box warning">
+                    <p><strong>Important:</strong> Your completion time will be automatically included in this survey.</p>
+                </div>
+                
+                <a href="#" id="survey1-link" class="btn btn-large" target="_blank" onclick="trackSurvey1Start()">
+                    Open Feedback Survey #1 →
                 </a>
                 
-                <div class="timer-display" id="test-timer" style="display: none;">
+                <div class="divider"></div>
+                
+                <p style="text-align: center; color: #9ca3af;">After completing the survey, return here and click below:</p>
+                
+                <div class="button-group">
+                    <button class="btn btn-secondary" onclick="startCaptchaTest2()">I've Completed Survey #1 →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Phase 4: CAPTCHA Test #2 -->
+        <div id="phase-4" class="phase">
+            <div class="card">
+                <div class="step-indicator">
+                    <div class="step completed">
+                        <div class="step-circle">✓</div>
+                        <div class="step-label">Pre-Survey</div>
+                    </div>
+                    <div class="step completed">
+                        <div class="step-circle">✓</div>
+                        <div class="step-label">Test #1</div>
+                    </div>
+                    <div class="step active">
+                        <div class="step-circle">3</div>
+                        <div class="step-label">Test #2</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-circle">4</div>
+                        <div class="step-label">Complete</div>
+                    </div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 65%"></div>
+                    </div>
+                    <div class="progress-text">Step 4 of 6</div>
+                </div>
+                
+                <h2>CAPTCHA System Test #2</h2>
+                
+                <div class="participant-id-display">
+                    <div class="label">Your Participant ID</div>
+                    <div class="id" id="pid-display-4"></div>
+                </div>
+                
+                <div class="info-box">
+                    <h3>📋 Instructions</h3>
+                    <ol style="margin-left: 20px;">
+                        <li>Click the button below to open the second CAPTCHA system</li>
+                        <li>Complete the CAPTCHA as you normally would</li>
+                        <li><strong>The timer starts automatically</strong> when you click the button</li>
+                        <li>Return to this page when you're done</li>
+                        <li>Click "I've Completed It" to continue</li>
+                    </ol>
+                </div>
+                
+                <div class="info-box warning">
+                    <p><strong>Note:</strong> This is a different CAPTCHA system. Complete it without comparing to the first one - we'll ask for comparisons later.</p>
+                </div>
+                
+                <a href="#" id="captcha2-link" class="captcha-button" target="_blank" onclick="startTimer2()">
+                    <span class="status-indicator active"></span>
+                    Open CAPTCHA System #2
+                </a>
+                
+                <div class="timer-display" id="timer2-display" style="display: none;">
                     <div class="label">Time Elapsed</div>
-                    <div class="time" id="test-time">00:00</div>
-                    <div class="label"><span class="status-indicator testing"></span>Testing in Progress...</div>
+                    <div class="time" id="timer2-time">00:00</div>
+                    <div class="label"><span class="status-indicator active"></span>Timer Running...</div>
                 </div>
                 
                 <div class="button-group">
-                    <button class="btn" id="test-complete-btn" onclick="completeTestTest()" disabled>
-                        ✓ I've Completed It
+                    <button class="btn btn-large" id="captcha2-complete-btn" onclick="completeCaptcha2()" disabled>
+                        I've Completed It →
                     </button>
                 </div>
             </div>
-            
-            <!-- Phase 3: Survey -->
-            <div id="phase-3" class="phase">
-                <div class="participant-id">
-                    <span class="status-indicator complete"></span>
-                    Participant ID: <span id="pid-display-3"></span>
-                    <button class="copy-btn" onclick="copyParticipantId()">Copy ID</button>
-                </div>
-                
-                <div class="instructions">
-                    <h3>📊 Final Step: Complete the Survey</h3>
-                    <p>You've completed both CAPTCHA tests! Here are your timing results:</p>
-                </div>
-                
-                <div class="progress-bar">
-                    <div class="progress-fill" style="width: 100%"></div>
-                </div>
-                
-                <div class="results-summary">
-                    <h4>⏱️ Your Results:</h4>
-                    <div class="result-item">
-                        <span class="result-label">Control CAPTCHA Time:</span>
-                        <span class="result-value" id="final-control-time"></span>
+        </div>
+        
+        <!-- Phase 5: Survey #2 -->
+        <div id="phase-5" class="phase">
+            <div class="card">
+                <div class="step-indicator">
+                    <div class="step completed">
+                        <div class="step-circle">✓</div>
+                        <div class="step-label">Pre-Survey</div>
                     </div>
-                    <div class="result-item">
-                        <span class="result-label">Alternative CAPTCHA Time:</span>
-                        <span class="result-value" id="final-test-time"></span>
+                    <div class="step completed">
+                        <div class="step-circle">✓</div>
+                        <div class="step-label">Test #1</div>
                     </div>
-                    <div class="result-item">
-                        <span class="result-label">Time Difference:</span>
-                        <span class="result-value" id="time-difference"></span>
+                    <div class="step completed">
+                        <div class="step-circle">✓</div>
+                        <div class="step-label">Test #2</div>
+                    </div>
+                    <div class="step active">
+                        <div class="step-circle">4</div>
+                        <div class="step-label">Complete</div>
                     </div>
                 </div>
                 
-                <div style="background: #e3f2fd; padding: 20px; border-radius: 8px; margin: 20px 0;">
-                    <p style="margin-bottom: 15px;"><strong>Important:</strong> Please use your <strong>Participant ID</strong> when filling out the survey. This will be automatically filled in the survey link below.</p>
-                    <p>The survey includes questions about:</p>
-                    <ul style="margin-left: 20px; margin-top: 10px; line-height: 1.8;">
-                        <li>Ten Usability Heuristics evaluation</li>
-                        <li>Likert scale questions on accessibility and user experience</li>
-                        <li>Open-ended feedback</li>
-                    </ul>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 80%"></div>
+                    </div>
+                    <div class="progress-text">Step 5 of 6</div>
                 </div>
                 
-                <a href="#" id="survey-link" class="captcha-link" target="_blank">
-                    📝 Open Survey (Google Forms)
+                <h2>Feedback Survey - System #2</h2>
+                
+                <div class="participant-id-display">
+                    <div class="label">Your Participant ID</div>
+                    <div class="id" id="pid-display-5"></div>
+                </div>
+                
+                <div class="summary-box">
+                    <h3>Your Completion Times:</h3>
+                    <div class="summary-item">
+                        <span class="summary-label">CAPTCHA System #1</span>
+                        <span class="summary-value" id="time1-display-2"></span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">CAPTCHA System #2</span>
+                        <span class="summary-value" id="time2-display"></span>
+                    </div>
+                </div>
+                
+                <p>Now rate your experience with the second CAPTCHA system.</p>
+                
+                <p>This survey includes the same questions as before:</p>
+                <ul>
+                    <li>Ease of completion rating</li>
+                    <li>Time efficiency rating</li>
+                    <li>Frustration level</li>
+                    <li>Instructions clarity</li>
+                    <li>Visual clarity and design</li>
+                    <li>Any specific issues you encountered</li>
+                </ul>
+                
+                <p><strong>Estimated time:</strong> 2 minutes</p>
+                
+                <a href="#" id="survey2-link" class="btn btn-large" target="_blank" onclick="trackSurvey2Start()">
+                    Open Feedback Survey #2 →
                 </a>
                 
+                <div class="divider"></div>
+                
+                <p style="text-align: center; color: #9ca3af;">After completing the survey, return here and click below:</p>
+                
                 <div class="button-group">
-                    <button class="btn btn-secondary" onclick="downloadResults()">
-                        💾 Download Your Results (Optional)
-                    </button>
+                    <button class="btn btn-secondary" onclick="showFinalSurvey()">I've Completed Survey #2 →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Phase 6: Final Comparison Survey -->
+        <div id="phase-6" class="phase">
+            <div class="card">
+                <div class="step-indicator">
+                    <div class="step completed">
+                        <div class="step-circle">✓</div>
+                        <div class="step-label">Pre-Survey</div>
+                    </div>
+                    <div class="step completed">
+                        <div class="step-circle">✓</div>
+                        <div class="step-label">Test #1</div>
+                    </div>
+                    <div class="step completed">
+                        <div class="step-circle">✓</div>
+                        <div class="step-label">Test #2</div>
+                    </div>
+                    <div class="step active">
+                        <div class="step-circle">4</div>
+                        <div class="step-label">Complete</div>
+                    </div>
                 </div>
                 
-                <div style="text-align: center; margin-top: 30px; color: #666; font-size: 14px;">
-                    <p>Thank you for your participation! Your feedback helps us create more accessible CAPTCHAs.</p>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 95%"></div>
+                    </div>
+                    <div class="progress-text">Final Step!</div>
                 </div>
+                
+                <h2>Final Comparison Survey</h2>
+                
+                <div class="participant-id-display">
+                    <div class="label">Your Participant ID</div>
+                    <div class="id" id="pid-display-6"></div>
+                </div>
+                
+                <div class="summary-box">
+                    <h3>📊 Your Results Summary:</h3>
+                    <div class="summary-item">
+                        <span class="summary-label">CAPTCHA System #1 Time</span>
+                        <span class="summary-value" id="time1-display-final"></span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">CAPTCHA System #2 Time</span>
+                        <span class="summary-value" id="time2-display-final"></span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Time Difference</span>
+                        <span class="summary-value" id="time-diff-display"></span>
+                    </div>
+                </div>
+                
+                <p>You're almost done! This final survey asks you to <strong>compare</strong> the two CAPTCHA systems.</p>
+                
+                <p>This survey includes:</p>
+                <ul>
+                    <li>Which system was faster (your perception)</li>
+                    <li>Which system was easier to use</li>
+                    <li>Your overall preference</li>
+                    <li>Comparative difficulty rating</li>
+                    <li>Would you recommend the alternative?</li>
+                    <li>Any final thoughts or suggestions</li>
+                </ul>
+                
+                <p><strong>Estimated time:</strong> 3 minutes</p>
+                
+                <div class="info-box success">
+                    <p><strong>Thank you for your time!</strong> This final survey completes your participation in the study.</p>
+                </div>
+                
+                <a href="#" id="final-survey-link" class="btn btn-large" target="_blank" onclick="trackFinalSurveyStart()">
+                    Open Final Comparison Survey →
+                </a>
+                
+                <div class="divider"></div>
+                
+                <p style="text-align: center; color: #9ca3af;">After completing the final survey, return here:</p>
+                
+                <div class="button-group">
+                    <button class="btn btn-secondary" onclick="showThankYou()">I've Completed the Final Survey →</button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Phase 7: Thank You -->
+        <div id="phase-7" class="phase">
+            <div class="card">
+                <div class="step-indicator">
+                    <div class="step completed">
+                        <div class="step-circle">✓</div>
+                        <div class="step-label">Pre-Survey</div>
+                    </div>
+                    <div class="step completed">
+                        <div class="step-circle">✓</div>
+                        <div class="step-label">Test #1</div>
+                    </div>
+                    <div class="step completed">
+                        <div class="step-circle">✓</div>
+                        <div class="step-label">Test #2</div>
+                    </div>
+                    <div class="step completed">
+                        <div class="step-circle">✓</div>
+                        <div class="step-label">Complete</div>
+                    </div>
+                </div>
+                
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 100%"></div>
+                    </div>
+                    <div class="progress-text">Study Complete! 🎉</div>
+                </div>
+                
+                <h2>Thank You for Your Participation!</h2>
+                
+                <div class="info-box success">
+                    <h3>✓ Study Completed Successfully</h3>
+                    <p>Your responses have been recorded and will contribute to important research on CAPTCHA accessibility and usability.</p>
+                </div>
+                
+                <div class="participant-id-display">
+                    <div class="label">Your Participant ID</div>
+                    <div class="id" id="pid-display-final"></div>
+                </div>
+                
+                <div class="summary-box">
+                    <h3>📊 Your Participation Summary:</h3>
+                    <div class="summary-item">
+                        <span class="summary-label">CAPTCHA System #1 Time</span>
+                        <span class="summary-value" id="final-time1"></span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">CAPTCHA System #2 Time</span>
+                        <span class="summary-value" id="final-time2"></span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Total Study Duration</span>
+                        <span class="summary-value" id="total-duration"></span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Surveys Completed</span>
+                        <span class="summary-value">4 / 4</span>
+                    </div>
+                </div>
+                
+                <h3>What Happens Next?</h3>
+                <ul>
+                    <li>Your data will be anonymized and analyzed with other participants</li>
+                    <li>Results will be used to improve CAPTCHA design and accessibility</li>
+                    <li>If you provided your email, we may contact you with study results</li>
+                </ul>
+                
+                <h3>Questions or Concerns?</h3>
+                <p>If you have any questions about this study or would like to learn more about the results, please contact:</p>
+                <div class="info-box">
+                    <p><strong>Research Team:</strong> [Your Name/Team Name]<br>
+                    <strong>Email:</strong> [your.email@domain.com]</p>
+                </div>
+                
+                <div class="divider"></div>
+                
+                <p style="text-align: center; font-size: 14px; color: #9ca3af;">
+                    You may now close this window. Thank you again for your valuable contribution to our research!
+                </p>
             </div>
         </div>
     </div>
     
     <script>
-        // Configuration - Replace these with your actual links
+        // ============================================
+        // CONFIGURATION - UPDATE THESE LINKS
+        // ============================================
         const CONFIG = {
-            controlCaptchaUrl: 'YOUR_FIGMA_CONTROL_CAPTCHA_LINK',
-            testCaptchaUrl: 'YOUR_FIGMA_TEST_CAPTCHA_LINK',
-            surveyBaseUrl: 'YOUR_GOOGLE_FORMS_LINK'
+            // Pre-study survey (demographics, initial opinions)
+            preSurveyUrl: 'YOUR_PRE_STUDY_GOOGLE_FORM_LINK',
+            
+            // CAPTCHA links - ORDER WILL BE RANDOMIZED
+            captcha1Url: 'YOUR_FIRST_CAPTCHA_FIGMA_LINK',
+            captcha2Url: 'YOUR_SECOND_CAPTCHA_FIGMA_LINK',
+            
+            // Individual feedback surveys (one after each CAPTCHA)
+            survey1Url: 'YOUR_FEEDBACK_SURVEY_1_GOOGLE_FORM_LINK',
+            survey2Url: 'YOUR_FEEDBACK_SURVEY_2_GOOGLE_FORM_LINK',
+            
+            // Final comparison survey
+            finalSurveyUrl: 'YOUR_FINAL_COMPARISON_GOOGLE_FORM_LINK',
+            
+            // Set to true to randomize which CAPTCHA is shown first
+            randomizeOrder: true
         };
         
-        // Study data
+        // ============================================
+        // STUDY DATA & LOGIC
+        // ============================================
         let studyData = {
             participantId: '',
-            email: '',
-            controlStartTime: null,
-            controlEndTime: null,
-            controlDuration: 0,
-            testStartTime: null,
-            testEndTime: null,
-            testDuration: 0,
-            timestamp: new Date().toISOString()
+            startTime: null,
+            captcha1Time: 0,
+            captcha2Time: 0,
+            captcha1StartTime: null,
+            captcha2StartTime: null,
+            orderRandomized: false,
+            captcha1IsTreatment: false // Will be set by randomization
         };
         
-        let controlInterval, testInterval;
+        let timer1Interval, timer2Interval;
         
         // Generate unique participant ID
         function generateParticipantId() {
-            const timestamp = Date.now().toString(36);
-            const random = Math.random().toString(36).substring(2, 7);
-            return `P-${timestamp}-${random}`.toUpperCase();
+            const timestamp = Date.now().toString(36).toUpperCase();
+            const random = Math.random().toString(36).substring(2, 6).toUpperCase();
+            return `P-${timestamp}-${random}`;
         }
         
-        // Format time in MM:SS
+        // Format time as MM:SS
         function formatTime(seconds) {
             const mins = Math.floor(seconds / 60);
             const secs = seconds % 60;
             return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
         
-        // Start the study
-        function startStudy() {
-            studyData.participantId = generateParticipantId();
-            studyData.email = document.getElementById('participant-email').value;
-            
-            // Update all participant ID displays
-            document.getElementById('pid-display-1').textContent = studyData.participantId;
-            document.getElementById('pid-display-2').textContent = studyData.participantId;
-            document.getElementById('pid-display-3').textContent = studyData.participantId;
-            
-            // Set CAPTCHA links
-            document.getElementById('control-captcha-link').href = CONFIG.controlCaptchaUrl;
-            document.getElementById('test-captcha-link').href = CONFIG.testCaptchaUrl;
-            
-            showPhase(1);
-        }
-        
-        // Control CAPTCHA timer
-        function startControlTimer() {
-            if (!studyData.controlStartTime) {
-                studyData.controlStartTime = new Date();
-                document.getElementById('control-timer').style.display = 'block';
-                document.getElementById('control-complete-btn').disabled = false;
-                
-                let seconds = 0;
-                controlInterval = setInterval(() => {
-                    seconds++;
-                    studyData.controlDuration = seconds;
-                    document.getElementById('control-time').textContent = formatTime(seconds);
-                }, 1000);
-            }
-        }
-        
-        function completeControlTest() {
-            studyData.controlEndTime = new Date();
-            clearInterval(controlInterval);
-            showPhase(2);
-        }
-        
-        // Test CAPTCHA timer
-        function startTestTimer() {
-            if (!studyData.testStartTime) {
-                studyData.testStartTime = new Date();
-                document.getElementById('test-timer').style.display = 'block';
-                document.getElementById('test-complete-btn').disabled = false;
-                
-                let seconds = 0;
-                testInterval = setInterval(() => {
-                    seconds++;
-                    studyData.testDuration = seconds;
-                    document.getElementById('test-time').textContent = formatTime(seconds);
-                }, 1000);
-            }
-        }
-        
-        function completeTestTest() {
-            studyData.testEndTime = new Date();
-            clearInterval(testInterval);
-            showSurvey();
-        }
-        
-        // Show survey with results
-        function showSurvey() {
-            document.getElementById('final-control-time').textContent = formatTime(studyData.controlDuration);
-            document.getElementById('final-test-time').textContent = formatTime(studyData.testDuration);
-            
-            const diff = studyData.testDuration - studyData.controlDuration;
-            const diffText = diff > 0 
-                ? `+${formatTime(Math.abs(diff))} slower`
-                : `-${formatTime(Math.abs(diff))} faster`;
-            document.getElementById('time-difference').textContent = diffText;
-            
-            // Create survey link with pre-filled data
-            const surveyUrl = `${CONFIG.surveyBaseUrl}?entry.participant_id=${encodeURIComponent(studyData.participantId)}&entry.control_time=${studyData.controlDuration}&entry.test_time=${studyData.testDuration}`;
-            document.getElementById('survey-link').href = surveyUrl;
-            
-            showPhase(3);
-            
-            // Save to localStorage
-            saveResults();
-        }
-        
-        // Phase navigation
+        // Navigate between phases
         function showPhase(phaseNum) {
             document.querySelectorAll('.phase').forEach(phase => {
                 phase.classList.remove('active');
             });
             document.getElementById(`phase-${phaseNum}`).classList.add('active');
-            window.scrollTo(0, 0);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         
-        // Copy participant ID
-        function copyParticipantId() {
-            navigator.clipboard.writeText(studyData.participantId);
-            alert('Participant ID copied to clipboard!');
+        // ============================================
+        // PHASE TRANSITIONS
+        // ============================================
+        
+        function startPreSurvey() {
+            studyData.participantId = generateParticipantId();
+            studyData.startTime = new Date();
+            
+            // Randomize CAPTCHA order if enabled
+            if (CONFIG.randomizeOrder && Math.random() < 0.5) {
+                studyData.orderRandomized = true;
+                studyData.captcha1IsTreatment = true;
+                // Swap the URLs
+                [CONFIG.captcha1Url, CONFIG.captcha2Url] = [CONFIG.captcha2Url, CONFIG.captcha1Url];
+            }
+            
+            // Update all participant ID displays
+            document.querySelectorAll('[id^="pid-display"]').forEach(el => {
+                el.textContent = studyData.participantId;
+            });
+            
+            // Set pre-survey link with participant ID
+            const preSurveyLink = `${CONFIG.preSurveyUrl}?entry.pid=${encodeURIComponent(studyData.participantId)}`;
+            document.getElementById('pre-survey-link').href = preSurveyLink;
+            
+            showPhase(1);
+            saveToLocalStorage();
         }
         
-        // Save results to localStorage
-        function saveResults() {
-            const results = JSON.parse(localStorage.getItem('captchaStudyResults') || '[]');
-            results.push(studyData);
-            localStorage.setItem('captchaStudyResults', JSON.stringify(results));
+        function trackPreSurveyStart() {
+            // Optional: Track when they opened the survey
         }
         
-        // Download results
-        function downloadResults() {
-            const data = JSON.stringify(studyData, null, 2);
-            const blob = new Blob([data], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `captcha-study-${studyData.participantId}.json`;
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+        function startCaptchaTest1() {
+            document.getElementById('captcha1-link').href = CONFIG.captcha1Url;
+            showPhase(2);
         }
+        
+        function startTimer1() {
+            if (!studyData.captcha1StartTime) {
+                studyData.captcha1StartTime = new Date();
+                document.getElementById('timer1-display').style.display = 'block';
+                document.getElementById('captcha1-complete-btn').disabled = false;
+                
+                let seconds = 0;
+                timer1Interval = setInterval(() => {
+                    seconds++;
+                    studyData.captcha1Time = seconds;
+                    document.getElementById('timer1-time').textContent = formatTime(seconds);
+                }, 1000);
+            }
+        }
+        
+        function completeCaptcha1() {
+            clearInterval(timer1Interval);
+            document.getElementById('time1-display').textContent = formatTime(studyData.captcha1Time);
+            document.getElementById('time1-display-2').textContent = formatTime(studyData.captcha1Time);
+            
+            // Set survey link with data
+            const survey1Link = `${CONFIG.survey1Url}?entry.pid=${encodeURIComponent(studyData.participantId)}&entry.time=${studyData.captcha1Time}&entry.system=1`;
+            document.getElementById('survey1-link').href = survey1Link;
+            
+            showPhase(3);
+            saveToLocalStorage();
+        }
+        
+        function trackSurvey1Start() {
+            // Optional: Track survey opens
+        }
+        
+        function startCaptchaTest2() {
+            document.getElementById('captcha2-link').href = CONFIG.captcha2Url;
+            showPhase(4);
+        }
+        
+        function startTimer2() {
+            if (!studyData.captcha2StartTime) {
+                studyData.captcha2StartTime = new Date();
+                document.getElementById('timer2-display').style.display = 'block';
+                document.getElementById('captcha2-complete-btn').disabled = false;
+                
+                let seconds = 0;
+                timer2Interval = setInterval(() => {
+                    seconds++;
+                    studyData.captcha2Time = seconds;
+                    document.getElementById('timer2-time').textContent = formatTime(seconds);
+                }, 1000);
+            }
+        }
+        
+        function completeCaptcha2() {
+            clearInterval(timer2Interval);
+            document.getElementById('time2-display').textContent = formatTime(studyData.captcha2Time);
+            
+            // Set survey link with data
+            const survey2Link = `${CONFIG.survey2Url}?entry.pid=${encodeURIComponent(studyData.participantId)}&entry.time=${studyData.captcha2Time}&entry.system=2`;
+            document.getElementById('survey2-link').href = survey2Link;
+            
+            showPhase(5);
+            saveToLocalStorage();
+        }
+        
+        function trackSurvey2Start() {
+            // Optional: Track survey opens
+        }
+        
+        function showFinalSurvey() {
+            document.getElementById('time1-display-final').textContent = formatTime(studyData.captcha1Time);
+            document.getElementById('time2-display-final').textContent = formatTime(studyData.captcha2Time);
+            
+            const diff = studyData.captcha2Time - studyData.captcha1Time;
+            const diffText = diff > 0 
+                ? `+${formatTime(Math.abs(diff))} (System #2 slower)`
+                : `-${formatTime(Math.abs(diff))} (System #2 faster)`;
+            document.getElementById('time-diff-display').textContent = diffText;
+            
+            // Set final survey link with all data
+            const finalLink = `${CONFIG.finalSurveyUrl}?entry.pid=${encodeURIComponent(studyData.participantId)}&entry.time1=${studyData.captcha1Time}&entry.time2=${studyData.captcha2Time}&entry.randomized=${studyData.orderRandomized}`;
+            document.getElementById('final-survey-link').href = finalLink;
+            
+            showPhase(6);
+        }
+        
+        function trackFinalSurveyStart() {
+            // Optional: Track final survey
+        }
+        
+        function showThankYou() {
+            const endTime = new Date();
+            const totalMinutes = Math.round((endTime - studyData.startTime) / 60000);
+            
+            document.getElementById('final-time1').textContent = formatTime(studyData.captcha1Time);
+            document.getElementById('final-time2').textContent = formatTime(studyData.captcha2Time);
+            document.getElementById('total-duration').textContent = `${totalMinutes} minutes`;
+            document.getElementById('pid-display-final').textContent = studyData.participantId;
+            
+            showPhase(7);
+            saveToLocalStorage();
+        }
+        
+        // ============================================
+        // DATA PERSISTENCE
+        // ============================================
+        
+        function saveToLocalStorage() {
+            localStorage.setItem('captchaStudyData', JSON.stringify(studyData));
+        }
+        
+        function loadFromLocalStorage() {
+            const saved = localStorage.getItem('captchaStudyData');
+            if (saved) {
+                studyData = JSON.parse(saved);
+                // Could restore state here if needed
+            }
+        }
+        
+        // Load saved data on page load
+        window.addEventListener('load', () => {
+            loadFromLocalStorage();
+        });
+        
+        // Warn before leaving if study in progress
+        window.addEventListener('beforeunload', (e) => {
+            if (studyData.participantId && !document.getElementById('phase-7').classList.contains('active')) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        });
     </script>
 </body>
 </html>
