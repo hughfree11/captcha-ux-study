@@ -371,38 +371,38 @@
     </div>
     
     <script>
-        // Simple 2-round CAPTCHA similar to reCAPTCHA
-        // Round 1: Traffic lights, Round 2: Crosswalks
+        // Using Unsplash Source API for REAL PHOTOS
+        // These are actual photographs that will load
         
-        // Set 1: Select TRAFFIC LIGHT images
+        // Set 1: Traffic lights vs other urban scenes
         const imageSet1 = {
-            instruction: 'Select all squares with <strong>traffic lights</strong>',
+            instruction: 'Select all images with <strong>traffic lights</strong>',
             images: [
-                { url: 'https://via.placeholder.com/300/87CEEB/333333?text=Street', hasTarget: false },        // Street
-                { url: 'https://via.placeholder.com/300/FFD700/333333?text=Traffic+Light', hasTarget: true },  // Traffic Light ✓
-                { url: 'https://via.placeholder.com/300/90EE90/333333?text=Park', hasTarget: false },          // Park
-                { url: 'https://via.placeholder.com/300/FFD700/333333?text=Traffic+Light', hasTarget: true },  // Traffic Light ✓
-                { url: 'https://via.placeholder.com/300/C0C0C0/333333?text=Building', hasTarget: false },      // Building
-                { url: 'https://via.placeholder.com/300/87CEEB/333333?text=Road', hasTarget: false },          // Road
-                { url: 'https://via.placeholder.com/300/FFD700/333333?text=Traffic+Light', hasTarget: true },  // Traffic Light ✓
-                { url: 'https://via.placeholder.com/300/90EE90/333333?text=Trees', hasTarget: false },         // Trees
-                { url: 'https://via.placeholder.com/300/C0C0C0/333333?text=Sidewalk', hasTarget: false }       // Sidewalk
+                { url: 'https://source.unsplash.com/300x300/?city,street', hasTarget: false },
+                { url: 'https://source.unsplash.com/300x300/?traffic-light,signal', hasTarget: true },
+                { url: 'https://source.unsplash.com/300x300/?building,architecture', hasTarget: false },
+                { url: 'https://source.unsplash.com/300x300/?traffic-signal,light', hasTarget: true },
+                { url: 'https://source.unsplash.com/300x300/?park,nature', hasTarget: false },
+                { url: 'https://source.unsplash.com/300x300/?road,highway', hasTarget: false },
+                { url: 'https://source.unsplash.com/300x300/?stoplight,traffic', hasTarget: true },
+                { url: 'https://source.unsplash.com/300x300/?tree,forest', hasTarget: false },
+                { url: 'https://source.unsplash.com/300x300/?cafe,shop', hasTarget: false }
             ]
         };
         
-        // Set 2: Select CROSSWALK images (if they get it wrong on first try)
+        // Set 2: Crosswalks vs other scenes (retry if wrong)
         const imageSet2 = {
-            instruction: 'Select all squares with <strong>crosswalks</strong>',
+            instruction: 'Select all images with <strong>crosswalks</strong>',
             images: [
-                { url: 'https://via.placeholder.com/300/90EE90/333333?text=Grass', hasTarget: false },         // Grass
-                { url: 'https://via.placeholder.com/300/D3D3D3/333333?text=Crosswalk', hasTarget: true },      // Crosswalk ✓
-                { url: 'https://via.placeholder.com/300/87CEEB/333333?text=Sky', hasTarget: false },           // Sky
-                { url: 'https://via.placeholder.com/300/D3D3D3/333333?text=Crosswalk', hasTarget: true },      // Crosswalk ✓
-                { url: 'https://via.placeholder.com/300/C0C0C0/333333?text=Pavement', hasTarget: false },      // Pavement
-                { url: 'https://via.placeholder.com/300/FFB6C1/333333?text=Store', hasTarget: false },         // Store
-                { url: 'https://via.placeholder.com/300/D3D3D3/333333?text=Crosswalk', hasTarget: true },      // Crosswalk ✓
-                { url: 'https://via.placeholder.com/300/87CEEB/333333?text=Water', hasTarget: false },         // Water
-                { url: 'https://via.placeholder.com/300/90EE90/333333?text=Garden', hasTarget: false }         // Garden
+                { url: 'https://source.unsplash.com/300x300/?grass,field', hasTarget: false },
+                { url: 'https://source.unsplash.com/300x300/?crosswalk,pedestrian', hasTarget: true },
+                { url: 'https://source.unsplash.com/300x300/?sky,clouds', hasTarget: false },
+                { url: 'https://source.unsplash.com/300x300/?zebra-crossing,street', hasTarget: true },
+                { url: 'https://source.unsplash.com/300x300/?mountain,landscape', hasTarget: false },
+                { url: 'https://source.unsplash.com/300x300/?water,ocean', hasTarget: false },
+                { url: 'https://source.unsplash.com/300x300/?pedestrian-crossing,road', hasTarget: true },
+                { url: 'https://source.unsplash.com/300x300/?flower,garden', hasTarget: false },
+                { url: 'https://source.unsplash.com/300x300/?beach,sand', hasTarget: false }
             ]
         };
         
@@ -413,7 +413,7 @@
         let correctAnswers = [];
         let selectedImages = new Set();
         let attempts = 0;
-        const maxAttempts = 2; // Only 2 rounds now
+        const maxAttempts = 2;
         
         // Calculate correct answers based on current image set
         function calculateCorrectAnswers() {
@@ -535,7 +535,6 @@
     </script>
 </body>
 </html>
-
 
 
 
