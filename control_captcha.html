@@ -1,559 +1,95 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CAPTCHA Verification</title>
+    <title>Mock reCAPTCHA v2 Image Challenge</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
-            background: #f9f9f9;
+            font-family: Arial, sans-serif;
             display: flex;
-            justify-content: center;
+            flex-direction: column;
             align-items: center;
-            min-height: 100vh;
-            padding: 20px;
+            margin-top: 50px;
         }
-        
         .captcha-container {
-            background: white;
-            border: 1px solid #d3d3d3;
-            border-radius: 3px;
-            padding: 30px;
-            max-width: 450px;
-            width: 100%;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            padding: 20px;
+            width: 320px;
+            text-align: center;
         }
-        
-        .captcha-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 20px;
-            padding-bottom: 15px;
-            border-bottom: 2px solid #f0f0f0;
-        }
-        
-        .captcha-icon {
-            width: 32px;
-            height: 32px;
-            background: #4285f4;
-            border-radius: 3px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 12px;
-            font-size: 18px;
-            color: white;
-            font-weight: bold;
-        }
-        
-        .captcha-title {
-            font-size: 16px;
-            color: #333;
-            font-weight: 500;
-        }
-        
-        .instructions {
-            font-size: 15px;
-            color: #555;
-            margin-bottom: 20px;
-            font-weight: 500;
-        }
-        
-        .image-grid {
+        .captcha-grid {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-bottom: 25px;
+            grid-template-columns: repeat(3, 100px);
+            grid-gap: 5px;
+            margin-top: 10px;
         }
-        
-        .image-cell {
-            aspect-ratio: 1;
-            border: 3px solid transparent;
+        .captcha-grid img {
+            width: 100px;
+            height: 100px;
             cursor: pointer;
-            overflow: hidden;
-            border-radius: 2px;
-            position: relative;
-            background: #f0f0f0;
-            transition: all 0.2s ease;
+            border: 2px solid transparent;
+            border-radius: 4px;
         }
-        
-        .image-cell:hover {
-            border-color: #4285f4;
-            opacity: 0.9;
+        .captcha-grid img.selected {
+            border-color: #4CAF50;
         }
-        
-        .image-cell.selected {
-            border-color: #4285f4;
-        }
-        
-        .image-cell.selected::after {
-            content: '✓';
-            position: absolute;
-            top: 5px;
-            right: 5px;
-            background: #4285f4;
-            color: white;
-            width: 24px;
-            height: 24px;
-            border-radius: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-            font-size: 16px;
-        }
-        
-        .image-cell img {
+        button {
+            margin-top: 15px;
+            padding: 10px;
             width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .verify-button {
-            width: 100%;
-            background: #4285f4;
-            color: white;
-            border: none;
-            padding: 14px;
-            font-size: 15px;
-            font-weight: 600;
-            border-radius: 3px;
             cursor: pointer;
-            transition: background 0.2s ease;
-        }
-        
-        .verify-button:hover {
-            background: #3367d6;
-        }
-        
-        .verify-button:disabled {
-            background: #cccccc;
-            cursor: not-allowed;
-        }
-        
-        .success-message {
-            display: none;
-            background: #e8f5e9;
-            border: 2px solid #4caf50;
-            border-radius: 3px;
-            padding: 20px;
-            text-align: center;
-        }
-        
-        .success-message.show {
-            display: block;
-        }
-        
-        .success-icon {
-            font-size: 48px;
-            color: #4caf50;
-            margin-bottom: 10px;
-        }
-        
-        .success-text {
-            font-size: 16px;
-            color: #2e7d32;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-        
-        .success-subtext {
-            font-size: 13px;
-            color: #558b2f;
-        }
-        
-        .recaptcha-branding {
-            margin-top: 20px;
-            padding-top: 15px;
-            border-top: 1px solid #f0f0f0;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            font-size: 11px;
-            color: #999;
-        }
-        
-        .recaptcha-logo {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-        }
-        
-        .recaptcha-logo-icon {
-            width: 20px;
-            height: 20px;
-            background: #4285f4;
-            border-radius: 2px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 10px;
-            font-weight: bold;
-        }
-        
-        .error-message {
-            display: none;
-            background: #ffebee;
-            border: 2px solid #f44336;
-            border-radius: 3px;
-            padding: 12px;
-            margin-bottom: 15px;
-            color: #c62828;
-            font-size: 14px;
-        }
-        
-        .error-message.show {
-            display: block;
-        }
-        
-        /* Checkbox Phase Styles */
-        .checkbox-container {
-            padding: 30px;
-            text-align: left;
-        }
-        
-        .checkbox-label {
-            display: flex;
-            align-items: center;
-            cursor: pointer;
-            font-size: 15px;
-            color: #333;
-            user-select: none;
-        }
-        
-        .robot-checkbox {
-            position: absolute;
-            opacity: 0;
-            cursor: pointer;
-        }
-        
-        .checkmark {
-            position: relative;
-            height: 28px;
-            width: 28px;
-            background-color: #fff;
-            border: 2px solid #c1c1c1;
-            border-radius: 2px;
-            margin-right: 12px;
-            transition: all 0.2s ease;
-        }
-        
-        .checkbox-label:hover .checkmark {
-            border-color: #4285f4;
-        }
-        
-        .robot-checkbox:checked ~ .checkmark {
-            background-color: #4285f4;
-            border-color: #4285f4;
-        }
-        
-        .checkmark:after {
-            content: "";
-            position: absolute;
-            display: none;
-            left: 9px;
-            top: 5px;
-            width: 6px;
-            height: 11px;
-            border: solid white;
-            border-width: 0 2px 2px 0;
-            transform: rotate(45deg);
-        }
-        
-        .robot-checkbox:checked ~ .checkmark:after {
-            display: block;
-            animation: checkmark 0.3s ease;
-        }
-        
-        @keyframes checkmark {
-            0% { height: 0; }
-            100% { height: 11px; }
-        }
-        
-        .checkbox-text {
-            font-weight: 500;
-        }
-        
-        .loading-container {
-            text-align: center;
-            padding: 20px;
-        }
-        
-        .loading-spinner {
-            border: 3px solid #f3f3f3;
-            border-top: 3px solid #4285f4;
-            border-radius: 50%;
-            width: 40px;
-            height: 40px;
-            animation: spin 1s linear infinite;
-            margin: 0 auto;
-        }
-        
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        
-        @media (max-width: 500px) {
-            .captcha-container {
-                padding: 20px;
-            }
-            
-            .image-grid {
-                gap: 6px;
-            }
         }
     </style>
 </head>
 <body>
-    <div class="captcha-container">
-        <div class="captcha-header">
-            <div class="captcha-icon">✓</div>
-            <div class="captcha-title">Verify you are human</div>
-        </div>
-        
-        <div id="checkbox-phase">
-            <div class="checkbox-container">
-                <label class="checkbox-label">
-                    <input type="checkbox" id="robot-checkbox" class="robot-checkbox">
-                    <span class="checkmark"></span>
-                    <span class="checkbox-text">I'm not a robot</span>
-                </label>
-            </div>
-            
-            <div class="loading-container" id="loading-container" style="display: none;">
-                <div class="loading-spinner"></div>
-                <div style="margin-top: 10px; font-size: 13px; color: #666;">Verifying...</div>
-            </div>
-        </div>
-        
-        <div id="captcha-task" style="display: none;">
-            <div class="instructions" id="instructions-text">
-                Select all images with <strong>people</strong> in them
-            </div>
-            
-            <div class="error-message" id="error-message">
-                Please try again. Select all correct images.
-            </div>
-            
-            <div class="image-grid" id="image-grid">
-                <!-- Images will be loaded here -->
-            </div>
-            
-            <button class="verify-button" id="verify-button">Verify</button>
-        </div>
-        
-        <div class="success-message" id="success-message">
-            <div class="success-icon">✓</div>
-            <div class="success-text">Verification successful</div>
-            <div class="success-subtext">You may now close this window and return to the study</div>
-        </div>
-        
-        <div class="recaptcha-branding">
-            <div class="recaptcha-logo">
-                <div class="recaptcha-logo-icon">r</div>
-                <span>reCAPTCHA</span>
-            </div>
-            <div>
-                <a href="#" style="color: #999; text-decoration: none;">Privacy</a>
-                <span style="margin: 0 5px;">-</span>
-                <a href="#" style="color: #999; text-decoration: none;">Terms</a>
-            </div>
-        </div>
+
+<div class="captcha-container">
+    <h2>Mock CAPTCHA Challenge</h2>
+    <p>Select all squares with <strong>traffic lights</strong></p>
+    <div class="captcha-grid">
+        <img src="https://via.placeholder.com/100x100?text=Car" data-correct="0">
+        <img src="https://via.placeholder.com/100x100?text=Traffic" data-correct="1">
+        <img src="https://via.placeholder.com/100x100?text=Tree" data-correct="0">
+        <img src="https://via.placeholder.com/100x100?text=Traffic" data-correct="1">
+        <img src="https://via.placeholder.com/100x100?text=Dog" data-correct="0">
+        <img src="https://via.placeholder.com/100x100?text=Traffic" data-correct="1">
+        <img src="https://via.placeholder.com/100x100?text=House" data-correct="0">
+        <img src="https://via.placeholder.com/100x100?text=Traffic" data-correct="1">
+        <img src="https://via.placeholder.com/100x100?text=Bike" data-correct="0">
     </div>
-    
-    <script>
-        // Icon-based CAPTCHA with clear visual representations
-        // Uses emojis/unicode symbols to represent objects clearly
-        
-        // Set 1: Select squares with CARS (🚗)
-        const imageSet1 = {
-            targetColor: 'cars',
-            instruction: 'Select all squares with <strong>CARS</strong> in them',
-            images: [
-                { url: 'https://via.placeholder.com/300/E8F5E9/4CAF50?text=🌳', hasTarget: false },  // Tree
-                { url: 'https://via.placeholder.com/300/E3F2FD/2196F3?text=🚗', hasTarget: true },   // Car ✓
-                { url: 'https://via.placeholder.com/300/FFF3E0/FF9800?text=🏠', hasTarget: false },  // House
-                { url: 'https://via.placeholder.com/300/E3F2FD/2196F3?text=🚙', hasTarget: true },   // Car ✓
-                { url: 'https://via.placeholder.com/300/E8F5E9/4CAF50?text=🌲', hasTarget: false },  // Tree
-                { url: 'https://via.placeholder.com/300/FFF3E0/FF9800?text=🏢', hasTarget: false },  // Building
-                { url: 'https://via.placeholder.com/300/E3F2FD/2196F3?text=🚕', hasTarget: true },   // Car ✓
-                { url: 'https://via.placeholder.com/300/E8F5E9/4CAF50?text=🌴', hasTarget: false },  // Tree
-                { url: 'https://via.placeholder.com/300/FFF3E0/FF9800?text=🏛️', hasTarget: false }   // Building
-            ]
-        };
-        
-        // Set 2: Select squares with PEOPLE (👤)
-        const imageSet2 = {
-            targetColor: 'people',
-            instruction: 'Select all squares with <strong>PEOPLE</strong> in them',
-            images: [
-                { url: 'https://via.placeholder.com/300/E8F5E9/4CAF50?text=🌳', hasTarget: false },  // Tree
-                { url: 'https://via.placeholder.com/300/FCE4EC/E91E63?text=👤', hasTarget: true },   // Person ✓
-                { url: 'https://via.placeholder.com/300/E3F2FD/2196F3?text=🚗', hasTarget: false },  // Car
-                { url: 'https://via.placeholder.com/300/FCE4EC/E91E63?text=👥', hasTarget: true },   // People ✓
-                { url: 'https://via.placeholder.com/300/FFF3E0/FF9800?text=🏠', hasTarget: false },  // House
-                { url: 'https://via.placeholder.com/300/E8F5E9/4CAF50?text=🌲', hasTarget: false },  // Tree
-                { url: 'https://via.placeholder.com/300/FCE4EC/E91E63?text=👨', hasTarget: true },   // Person ✓
-                { url: 'https://via.placeholder.com/300/FFF3E0/FF9800?text=🏢', hasTarget: false },  // Building
-                { url: 'https://via.placeholder.com/300/E3F2FD/2196F3?text=🚙', hasTarget: false }   // Car
-            ]
-        };
-        
-        // Set 3: Select squares with BUILDINGS (🏢)
-        const imageSet3 = {
-            targetColor: 'buildings',
-            instruction: 'Select all squares with <strong>BUILDINGS</strong> in them',
-            images: [
-                { url: 'https://via.placeholder.com/300/E8F5E9/4CAF50?text=🌳', hasTarget: false },  // Tree
-                { url: 'https://via.placeholder.com/300/FFF3E0/FF9800?text=🏢', hasTarget: true },   // Building ✓
-                { url: 'https://via.placeholder.com/300/E3F2FD/2196F3?text=🚗', hasTarget: false },  // Car
-                { url: 'https://via.placeholder.com/300/FFF3E0/FF9800?text=🏠', hasTarget: true },   // Building ✓
-                { url: 'https://via.placeholder.com/300/FCE4EC/E91E63?text=👤', hasTarget: false },  // Person
-                { url: 'https://via.placeholder.com/300/E8F5E9/4CAF50?text=🌲', hasTarget: false },  // Tree
-                { url: 'https://via.placeholder.com/300/FFF3E0/FF9800?text=🏛️', hasTarget: true },   // Building ✓
-                { url: 'https://via.placeholder.com/300/FCE4EC/E91E63?text=👥', hasTarget: false },  // People
-                { url: 'https://via.placeholder.com/300/E8F5E9/4CAF50?text=🌴', hasTarget: false }   // Tree
-            ]
-        };
-        
-        const imageSets = [imageSet1, imageSet2, imageSet3];
-        
-        let currentSet = 0;
-        let currentImageData = imageSets[0].images;
-        let correctAnswers = [];
-        let selectedImages = new Set();
-        let attempts = 0;
-        const maxAttempts = 3;
-        
-        // Calculate correct answers based on current image set
-        function calculateCorrectAnswers() {
-            correctAnswers = [];
-            currentImageData.forEach((img, index) => {
-                if (img.hasTarget) {
-                    correctAnswers.push(index);
-                }
-            });
-        }
-        
-        // Load images into the grid
-        function loadImages() {
-            const grid = document.getElementById('image-grid');
-            grid.innerHTML = ''; // Clear existing images
-            selectedImages.clear();
-            
-            // Update the instruction text
-            const instructionHTML = imageSets[currentSet].instruction;
-            document.getElementById('instructions-text').innerHTML = instructionHTML;
-            
-            currentImageData.forEach((img, index) => {
-                const cell = document.createElement('div');
-                cell.className = 'image-cell';
-                cell.dataset.index = index;
-                
-                const imgElement = document.createElement('img');
-                imgElement.src = img.url;
-                imgElement.alt = `Image ${index + 1}`;
-                imgElement.loading = 'eager'; // Load images immediately
-                
-                cell.appendChild(imgElement);
-                cell.addEventListener('click', () => toggleImage(index, cell));
-                
-                grid.appendChild(cell);
-            });
-        }
-        
-        // Initialize on page load
-        calculateCorrectAnswers();
-        loadImages();
-        
-        // Checkbox handler
-        document.getElementById('robot-checkbox').addEventListener('change', function() {
-            if (this.checked) {
-                // Show loading spinner
-                document.getElementById('loading-container').style.display = 'block';
-                
-                // After 1.5 seconds, show the image challenge
-                setTimeout(() => {
-                    document.getElementById('checkbox-phase').style.display = 'none';
-                    document.getElementById('captcha-task').style.display = 'block';
-                }, 1500);
-            }
-        });
-        
-        function toggleImage(index, cell) {
-            if (selectedImages.has(index)) {
-                selectedImages.delete(index);
-                cell.classList.remove('selected');
-            } else {
-                selectedImages.add(index);
-                cell.classList.add('selected');
-            }
-            
-            // Hide error message when user makes changes
-            document.getElementById('error-message').classList.remove('show');
-        }
-        
-        document.getElementById('verify-button').addEventListener('click', () => {
-            const selectedArray = Array.from(selectedImages).sort((a, b) => a - b);
-            const correctArray = correctAnswers.sort((a, b) => a - b);
-            
-            const isCorrect = JSON.stringify(selectedArray) === JSON.stringify(correctArray);
-            
-            if (isCorrect) {
-                // Success!
-                document.getElementById('captcha-task').style.display = 'none';
-                document.getElementById('success-message').classList.add('show');
-                
-                // Store completion in localStorage for study to detect
-                localStorage.setItem('captcha_completed', 'true');
-                localStorage.setItem('captcha_completion_time', Date.now());
-            } else {
-                attempts++;
-                
-                if (attempts >= maxAttempts) {
-                    // After max attempts, show success anyway to avoid frustrating users
-                    document.getElementById('captcha-task').style.display = 'none';
-                    document.getElementById('success-message').classList.add('show');
-                    localStorage.setItem('captcha_completed', 'true');
-                    localStorage.setItem('captcha_completion_time', Date.now());
-                } else {
-                    // Show error and load new image set
-                    document.getElementById('error-message').classList.add('show');
-                    
-                    // Load next image set
-                    currentSet++;
-                    if (currentSet < imageSets.length) {
-                        currentImageData = imageSets[currentSet].images;
-                        calculateCorrectAnswers();
-                        
-                        // Brief delay before loading new images (feels more realistic)
-                        setTimeout(() => {
-                            loadImages();
-                            document.getElementById('error-message').classList.remove('show');
-                        }, 1500);
-                    }
-                }
-            }
-        });
-        
-        // Record start time when page loads
-        window.addEventListener('load', () => {
-            localStorage.setItem('captcha_start_time', Date.now());
-        });
-    </script>
+    <button onclick="checkCaptcha()">Submit</button>
+    <p id="result"></p>
+</div>
+
+<script>
+const images = document.querySelectorAll('.captcha-grid img');
+images.forEach(img => {
+    img.addEventListener('click', () => {
+        img.classList.toggle('selected');
+    });
+});
+
+function checkCaptcha() {
+    let success = true;
+    images.forEach(img => {
+        const correct = img.dataset.correct === "1";
+        const selected = img.classList.contains('selected');
+        if (correct !== selected) success = false;
+    });
+    const result = document.getElementById('result');
+    if (success) {
+        result.style.color = 'green';
+        result.textContent = "CAPTCHA passed!";
+    } else {
+        result.style.color = 'red';
+        result.textContent = "CAPTCHA failed. Try again.";
+    }
+}
+</script>
+
 </body>
 </html>
-
-
 
 
 
