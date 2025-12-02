@@ -336,12 +336,8 @@
         </div>
         
         <div id="captcha-task" style="display: none;">
-            <div class="instructions">
-                Select images in positions <strong>2, 4, and 7</strong>
-            </div>
-            
-            <div class="helper-text" style="font-size: 13px; color: #777; margin-bottom: 15px; text-align: center;">
-                (Count from left to right, top to bottom: 1-2-3, 4-5-6, 7-8-9)
+            <div class="instructions" id="instructions-text">
+                Select all images with <strong>people</strong> in them
             </div>
             
             <div class="error-message" id="error-message">
@@ -375,52 +371,64 @@
     </div>
     
     <script>
-        // Image sets using placeholder.com - extremely reliable and fast
-        // Correct answers are always positions 2, 4, and 7 (indices 1, 3, 6)
+        // Image sets using actual photos from Lorem Picsum with specific IDs
+        // These are real photos that will load consistently
         
-        // Set 1: Initial challenge
-        const imageSet1 = [
-            { url: 'https://via.placeholder.com/300/4A90E2/FFFFFF?text=1', hasTarget: false },  // Position 1
-            { url: 'https://via.placeholder.com/300/7B68EE/FFFFFF?text=2', hasTarget: true },   // Position 2 ✓
-            { url: 'https://via.placeholder.com/300/4A90E2/FFFFFF?text=3', hasTarget: false },  // Position 3
-            { url: 'https://via.placeholder.com/300/7B68EE/FFFFFF?text=4', hasTarget: true },   // Position 4 ✓
-            { url: 'https://via.placeholder.com/300/4A90E2/FFFFFF?text=5', hasTarget: false },  // Position 5
-            { url: 'https://via.placeholder.com/300/4A90E2/FFFFFF?text=6', hasTarget: false },  // Position 6
-            { url: 'https://via.placeholder.com/300/7B68EE/FFFFFF?text=7', hasTarget: true },   // Position 7 ✓
-            { url: 'https://via.placeholder.com/300/4A90E2/FFFFFF?text=8', hasTarget: false },  // Position 8
-            { url: 'https://via.placeholder.com/300/4A90E2/FFFFFF?text=9', hasTarget: false }   // Position 9
-        ];
+        // Set 1: Identify images with PEOPLE in them
+        const imageSet1 = {
+            targetColor: 'people',
+            instruction: 'Select all images with <strong>people</strong> in them',
+            images: [
+                { url: 'https://picsum.photos/id/177/300/300', hasTarget: false },  // Architecture
+                { url: 'https://picsum.photos/id/1011/300/300', hasTarget: true },  // Person ✓
+                { url: 'https://picsum.photos/id/1015/300/300', hasTarget: false }, // River
+                { url: 'https://picsum.photos/id/1027/300/300', hasTarget: true },  // People ✓
+                { url: 'https://picsum.photos/id/1035/300/300', hasTarget: false }, // Coffee
+                { url: 'https://picsum.photos/id/1042/300/300', hasTarget: false }, // Building
+                { url: 'https://picsum.photos/id/64/300/300', hasTarget: true },    // Person ✓
+                { url: 'https://picsum.photos/id/1080/300/300', hasTarget: false }, // Forest
+                { url: 'https://picsum.photos/id/1081/300/300', hasTarget: false }  // Mountain
+            ]
+        };
         
-        // Set 2: Retry challenge (different colors, same positions)
-        const imageSet2 = [
-            { url: 'https://via.placeholder.com/300/50C878/FFFFFF?text=1', hasTarget: false },  // Position 1
-            { url: 'https://via.placeholder.com/300/FF6347/FFFFFF?text=2', hasTarget: true },   // Position 2 ✓
-            { url: 'https://via.placeholder.com/300/50C878/FFFFFF?text=3', hasTarget: false },  // Position 3
-            { url: 'https://via.placeholder.com/300/FF6347/FFFFFF?text=4', hasTarget: true },   // Position 4 ✓
-            { url: 'https://via.placeholder.com/300/50C878/FFFFFF?text=5', hasTarget: false },  // Position 5
-            { url: 'https://via.placeholder.com/300/50C878/FFFFFF?text=6', hasTarget: false },  // Position 6
-            { url: 'https://via.placeholder.com/300/FF6347/FFFFFF?text=7', hasTarget: true },   // Position 7 ✓
-            { url: 'https://via.placeholder.com/300/50C878/FFFFFF?text=8', hasTarget: false },  // Position 8
-            { url: 'https://via.placeholder.com/300/50C878/FFFFFF?text=9', hasTarget: false }   // Position 9
-        ];
+        // Set 2: Identify images with VEHICLES/CARS
+        const imageSet2 = {
+            targetColor: 'vehicles',
+            instruction: 'Select all images with <strong>vehicles</strong> in them',
+            images: [
+                { url: 'https://picsum.photos/id/1018/300/300', hasTarget: false }, // Path
+                { url: 'https://picsum.photos/id/111/300/300', hasTarget: true },   // Car ✓
+                { url: 'https://picsum.photos/id/152/300/300', hasTarget: false },  // Books
+                { url: 'https://picsum.photos/id/183/300/300', hasTarget: true },   // Car/Street ✓
+                { url: 'https://picsum.photos/id/196/300/300', hasTarget: false },  // Cat
+                { url: 'https://picsum.photos/id/201/300/300', hasTarget: false },  // Flower
+                { url: 'https://picsum.photos/id/279/300/300', hasTarget: true },   // Vehicle ✓
+                { url: 'https://picsum.photos/id/292/300/300', hasTarget: false },  // Nature
+                { url: 'https://picsum.photos/id/325/300/300', hasTarget: false }   // Bridge
+            ]
+        };
         
-        // Set 3: Second retry (different colors, same positions)
-        const imageSet3 = [
-            { url: 'https://via.placeholder.com/300/FFD700/333333?text=1', hasTarget: false },  // Position 1
-            { url: 'https://via.placeholder.com/300/FF69B4/FFFFFF?text=2', hasTarget: true },   // Position 2 ✓
-            { url: 'https://via.placeholder.com/300/FFD700/333333?text=3', hasTarget: false },  // Position 3
-            { url: 'https://via.placeholder.com/300/FF69B4/FFFFFF?text=4', hasTarget: true },   // Position 4 ✓
-            { url: 'https://via.placeholder.com/300/FFD700/333333?text=5', hasTarget: false },  // Position 5
-            { url: 'https://via.placeholder.com/300/FFD700/333333?text=6', hasTarget: false },  // Position 6
-            { url: 'https://via.placeholder.com/300/FF69B4/FFFFFF?text=7', hasTarget: true },   // Position 7 ✓
-            { url: 'https://via.placeholder.com/300/FFD700/333333?text=8', hasTarget: false },  // Position 8
-            { url: 'https://via.placeholder.com/300/FFD700/333333?text=9', hasTarget: false }   // Position 9
-        ];
+        // Set 3: Identify images with BUILDINGS
+        const imageSet3 = {
+            targetColor: 'buildings',
+            instruction: 'Select all images with <strong>buildings</strong> in them',
+            images: [
+                { url: 'https://picsum.photos/id/102/300/300', hasTarget: false },  // Beach
+                { url: 'https://picsum.photos/id/110/300/300', hasTarget: true },   // Building ✓
+                { url: 'https://picsum.photos/id/119/300/300', hasTarget: false },  // Grass
+                { url: 'https://picsum.photos/id/164/300/300', hasTarget: true },   // Architecture ✓
+                { url: 'https://picsum.photos/id/180/300/300', hasTarget: false },  // Flower
+                { url: 'https://picsum.photos/id/188/300/300', hasTarget: false },  // Animal
+                { url: 'https://picsum.photos/id/257/300/300', hasTarget: true },   // Building ✓
+                { url: 'https://picsum.photos/id/292/300/300', hasTarget: false },  // Nature
+                { url: 'https://picsum.photos/id/395/300/300', hasTarget: false }   // Landscape
+            ]
+        };
         
         const imageSets = [imageSet1, imageSet2, imageSet3];
         
         let currentSet = 0;
-        let currentImageData = imageSets[0];
+        let currentImageData = imageSets[0].images;
         let correctAnswers = [];
         let selectedImages = new Set();
         let attempts = 0;
@@ -441,6 +449,10 @@
             const grid = document.getElementById('image-grid');
             grid.innerHTML = ''; // Clear existing images
             selectedImages.clear();
+            
+            // Update the instruction text
+            const instructionHTML = imageSets[currentSet].instruction;
+            document.getElementById('instructions-text').innerHTML = instructionHTML;
             
             currentImageData.forEach((img, index) => {
                 const cell = document.createElement('div');
@@ -520,7 +532,7 @@
                     // Load next image set
                     currentSet++;
                     if (currentSet < imageSets.length) {
-                        currentImageData = imageSets[currentSet];
+                        currentImageData = imageSets[currentSet].images;
                         calculateCorrectAnswers();
                         
                         // Brief delay before loading new images (feels more realistic)
@@ -540,3 +552,7 @@
     </script>
 </body>
 </html>
+
+
+
+
