@@ -1,3 +1,9 @@
+
+
+
+Control captcha · HTML
+Copy
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -371,57 +377,57 @@
     </div>
     
     <script>
-        // Image sets using actual photos from Lorem Picsum with specific IDs
-        // These are real photos that will load consistently
+        // Icon-based CAPTCHA with clear visual representations
+        // Uses emojis/unicode symbols to represent objects clearly
         
-        // Set 1: Identify images with PEOPLE in them
+        // Set 1: Select squares with CARS (🚗)
         const imageSet1 = {
-            targetColor: 'people',
-            instruction: 'Select all images with <strong>people</strong> in them',
+            targetColor: 'cars',
+            instruction: 'Select all squares with <strong>CARS</strong> in them',
             images: [
-                { url: 'https://picsum.photos/id/177/300/300', hasTarget: false },  // Architecture
-                { url: 'https://picsum.photos/id/1011/300/300', hasTarget: true },  // Person ✓
-                { url: 'https://picsum.photos/id/1015/300/300', hasTarget: false }, // River
-                { url: 'https://picsum.photos/id/1027/300/300', hasTarget: true },  // People ✓
-                { url: 'https://picsum.photos/id/1035/300/300', hasTarget: false }, // Coffee
-                { url: 'https://picsum.photos/id/1042/300/300', hasTarget: false }, // Building
-                { url: 'https://picsum.photos/id/64/300/300', hasTarget: true },    // Person ✓
-                { url: 'https://picsum.photos/id/1080/300/300', hasTarget: false }, // Forest
-                { url: 'https://picsum.photos/id/1081/300/300', hasTarget: false }  // Mountain
+                { url: 'https://via.placeholder.com/300/E8F5E9/4CAF50?text=🌳', hasTarget: false },  // Tree
+                { url: 'https://via.placeholder.com/300/E3F2FD/2196F3?text=🚗', hasTarget: true },   // Car ✓
+                { url: 'https://via.placeholder.com/300/FFF3E0/FF9800?text=🏠', hasTarget: false },  // House
+                { url: 'https://via.placeholder.com/300/E3F2FD/2196F3?text=🚙', hasTarget: true },   // Car ✓
+                { url: 'https://via.placeholder.com/300/E8F5E9/4CAF50?text=🌲', hasTarget: false },  // Tree
+                { url: 'https://via.placeholder.com/300/FFF3E0/FF9800?text=🏢', hasTarget: false },  // Building
+                { url: 'https://via.placeholder.com/300/E3F2FD/2196F3?text=🚕', hasTarget: true },   // Car ✓
+                { url: 'https://via.placeholder.com/300/E8F5E9/4CAF50?text=🌴', hasTarget: false },  // Tree
+                { url: 'https://via.placeholder.com/300/FFF3E0/FF9800?text=🏛️', hasTarget: false }   // Building
             ]
         };
         
-        // Set 2: Identify images with VEHICLES/CARS
+        // Set 2: Select squares with PEOPLE (👤)
         const imageSet2 = {
-            targetColor: 'vehicles',
-            instruction: 'Select all images with <strong>vehicles</strong> in them',
+            targetColor: 'people',
+            instruction: 'Select all squares with <strong>PEOPLE</strong> in them',
             images: [
-                { url: 'https://picsum.photos/id/1018/300/300', hasTarget: false }, // Path
-                { url: 'https://picsum.photos/id/111/300/300', hasTarget: true },   // Car ✓
-                { url: 'https://picsum.photos/id/152/300/300', hasTarget: false },  // Books
-                { url: 'https://picsum.photos/id/183/300/300', hasTarget: true },   // Car/Street ✓
-                { url: 'https://picsum.photos/id/196/300/300', hasTarget: false },  // Cat
-                { url: 'https://picsum.photos/id/201/300/300', hasTarget: false },  // Flower
-                { url: 'https://picsum.photos/id/279/300/300', hasTarget: true },   // Vehicle ✓
-                { url: 'https://picsum.photos/id/292/300/300', hasTarget: false },  // Nature
-                { url: 'https://picsum.photos/id/325/300/300', hasTarget: false }   // Bridge
+                { url: 'https://via.placeholder.com/300/E8F5E9/4CAF50?text=🌳', hasTarget: false },  // Tree
+                { url: 'https://via.placeholder.com/300/FCE4EC/E91E63?text=👤', hasTarget: true },   // Person ✓
+                { url: 'https://via.placeholder.com/300/E3F2FD/2196F3?text=🚗', hasTarget: false },  // Car
+                { url: 'https://via.placeholder.com/300/FCE4EC/E91E63?text=👥', hasTarget: true },   // People ✓
+                { url: 'https://via.placeholder.com/300/FFF3E0/FF9800?text=🏠', hasTarget: false },  // House
+                { url: 'https://via.placeholder.com/300/E8F5E9/4CAF50?text=🌲', hasTarget: false },  // Tree
+                { url: 'https://via.placeholder.com/300/FCE4EC/E91E63?text=👨', hasTarget: true },   // Person ✓
+                { url: 'https://via.placeholder.com/300/FFF3E0/FF9800?text=🏢', hasTarget: false },  // Building
+                { url: 'https://via.placeholder.com/300/E3F2FD/2196F3?text=🚙', hasTarget: false }   // Car
             ]
         };
         
-        // Set 3: Identify images with BUILDINGS
+        // Set 3: Select squares with BUILDINGS (🏢)
         const imageSet3 = {
             targetColor: 'buildings',
-            instruction: 'Select all images with <strong>buildings</strong> in them',
+            instruction: 'Select all squares with <strong>BUILDINGS</strong> in them',
             images: [
-                { url: 'https://picsum.photos/id/102/300/300', hasTarget: false },  // Beach
-                { url: 'https://picsum.photos/id/110/300/300', hasTarget: true },   // Building ✓
-                { url: 'https://picsum.photos/id/119/300/300', hasTarget: false },  // Grass
-                { url: 'https://picsum.photos/id/164/300/300', hasTarget: true },   // Architecture ✓
-                { url: 'https://picsum.photos/id/180/300/300', hasTarget: false },  // Flower
-                { url: 'https://picsum.photos/id/188/300/300', hasTarget: false },  // Animal
-                { url: 'https://picsum.photos/id/257/300/300', hasTarget: true },   // Building ✓
-                { url: 'https://picsum.photos/id/292/300/300', hasTarget: false },  // Nature
-                { url: 'https://picsum.photos/id/395/300/300', hasTarget: false }   // Landscape
+                { url: 'https://via.placeholder.com/300/E8F5E9/4CAF50?text=🌳', hasTarget: false },  // Tree
+                { url: 'https://via.placeholder.com/300/FFF3E0/FF9800?text=🏢', hasTarget: true },   // Building ✓
+                { url: 'https://via.placeholder.com/300/E3F2FD/2196F3?text=🚗', hasTarget: false },  // Car
+                { url: 'https://via.placeholder.com/300/FFF3E0/FF9800?text=🏠', hasTarget: true },   // Building ✓
+                { url: 'https://via.placeholder.com/300/FCE4EC/E91E63?text=👤', hasTarget: false },  // Person
+                { url: 'https://via.placeholder.com/300/E8F5E9/4CAF50?text=🌲', hasTarget: false },  // Tree
+                { url: 'https://via.placeholder.com/300/FFF3E0/FF9800?text=🏛️', hasTarget: true },   // Building ✓
+                { url: 'https://via.placeholder.com/300/FCE4EC/E91E63?text=👥', hasTarget: false },  // People
+                { url: 'https://via.placeholder.com/300/E8F5E9/4CAF50?text=🌴', hasTarget: false }   // Tree
             ]
         };
         
@@ -552,6 +558,17 @@
     </script>
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
 
 
 
