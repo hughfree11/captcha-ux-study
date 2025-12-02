@@ -337,7 +337,7 @@
         
         <div id="captcha-task" style="display: none;">
             <div class="instructions" id="instructions-text">
-                Select all images with <strong>people</strong> in them
+                Select all images with <strong>cars</strong>
             </div>
             
             <div class="error-message" id="error-message">
@@ -371,38 +371,36 @@
     </div>
     
     <script>
-        // Using Unsplash Source API for REAL PHOTOS
-        // These are actual photographs that will load
+        // GUARANTEED TO LOAD - Using Wikimedia Commons
+        // Round 1: Cars, Round 2: Animals
         
-        // Set 1: Traffic lights vs other urban scenes
         const imageSet1 = {
-            instruction: 'Select all images with <strong>traffic lights</strong>',
+            instruction: 'Select all images with <strong>cars</strong>',
             images: [
-                { url: 'https://source.unsplash.com/300x300/?city,street', hasTarget: false },
-                { url: 'https://source.unsplash.com/300x300/?traffic-light,signal', hasTarget: true },
-                { url: 'https://source.unsplash.com/300x300/?building,architecture', hasTarget: false },
-                { url: 'https://source.unsplash.com/300x300/?traffic-signal,light', hasTarget: true },
-                { url: 'https://source.unsplash.com/300x300/?park,nature', hasTarget: false },
-                { url: 'https://source.unsplash.com/300x300/?road,highway', hasTarget: false },
-                { url: 'https://source.unsplash.com/300x300/?stoplight,traffic', hasTarget: true },
-                { url: 'https://source.unsplash.com/300x300/?tree,forest', hasTarget: false },
-                { url: 'https://source.unsplash.com/300x300/?cafe,shop', hasTarget: false }
+                { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/NYC_-_Greenpoint_Historic_District.jpg/300px-NYC_-_Greenpoint_Historic_District.jpg', hasTarget: false },
+                { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Red_car_green_bush.jpg/300px-Red_car_green_bush.jpg', hasTarget: true },
+                { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Everest_Peace_Project_-_The_Mountain.jpg/300px-Everest_Peace_Project_-_The_Mountain.jpg', hasTarget: false },
+                { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/8/88/Lamborghini_Murcielago.jpg/300px-Lamborghini_Murcielago.jpg', hasTarget: true },
+                { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Hopetoun_falls.jpg/300px-Hopetoun_falls.jpg', hasTarget: false },
+                { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/PNG_transparency_demonstration_1.png/300px-PNG_transparency_demonstration_1.png', hasTarget: false },
+                { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/7/71/2011_Volkswagen_Jetta_sedan_--_2011_DC.jpg/300px-2011_Volkswagen_Jetta_sedan_--_2011_DC.jpg', hasTarget: true },
+                { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/15/Cat_August_2010-4.jpg/300px-Cat_August_2010-4.jpg', hasTarget: false },
+                { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Stadtlohn%2C_Rekener_Str._--_2016_--_4016.jpg/300px-Stadtlohn%2C_Rekener_Str._--_2016_--_4016.jpg', hasTarget: false }
             ]
         };
         
-        // Set 2: Crosswalks vs other scenes (retry if wrong)
         const imageSet2 = {
-            instruction: 'Select all images with <strong>crosswalks</strong>',
+            instruction: 'Select all images with <strong>animals</strong>',
             images: [
-                { url: 'https://source.unsplash.com/300x300/?grass,field', hasTarget: false },
-                { url: 'https://source.unsplash.com/300x300/?crosswalk,pedestrian', hasTarget: true },
-                { url: 'https://source.unsplash.com/300x300/?sky,clouds', hasTarget: false },
-                { url: 'https://source.unsplash.com/300x300/?zebra-crossing,street', hasTarget: true },
-                { url: 'https://source.unsplash.com/300x300/?mountain,landscape', hasTarget: false },
-                { url: 'https://source.unsplash.com/300x300/?water,ocean', hasTarget: false },
-                { url: 'https://source.unsplash.com/300x300/?pedestrian-crossing,road', hasTarget: true },
-                { url: 'https://source.unsplash.com/300x300/?flower,garden', hasTarget: false },
-                { url: 'https://source.unsplash.com/300x300/?beach,sand', hasTarget: false }
+                { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/9/9d/NYC_-_Greenpoint_Historic_District.jpg/300px-NYC_-_Greenpoint_Historic_District.jpg', hasTarget: false },
+                { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3a/Cat03.jpg/300px-Cat03.jpg', hasTarget: true },
+                { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/e/e7/Everest_Peace_Project_-_The_Mountain.jpg/300px-Everest_Peace_Project_-_The_Mountain.jpg', hasTarget: false },
+                { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/6/6e/Golde33443.jpg/300px-Golde33443.jpg', hasTarget: true },
+                { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/36/Hopetoun_falls.jpg/300px-Hopetoun_falls.jpg', hasTarget: false },
+                { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/3/3f/Red_car_green_bush.jpg/300px-Red_car_green_bush.jpg', hasTarget: false },
+                { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/4d/Cat_November_2010-1a.jpg/300px-Cat_November_2010-1a.jpg', hasTarget: true },
+                { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/d/d3/Stadtlohn%2C_Rekener_Str._--_2016_--_4016.jpg/300px-Stadtlohn%2C_Rekener_Str._--_2016_--_4016.jpg', hasTarget: false },
+                { url: 'https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/PNG_transparency_demonstration_1.png/300px-PNG_transparency_demonstration_1.png', hasTarget: false }
             ]
         };
         
@@ -415,7 +413,6 @@
         let attempts = 0;
         const maxAttempts = 2;
         
-        // Calculate correct answers based on current image set
         function calculateCorrectAnswers() {
             correctAnswers = [];
             currentImageData.forEach((img, index) => {
@@ -425,15 +422,12 @@
             });
         }
         
-        // Load images into the grid
         function loadImages() {
             const grid = document.getElementById('image-grid');
-            grid.innerHTML = ''; // Clear existing images
+            grid.innerHTML = '';
             selectedImages.clear();
             
-            // Update the instruction text
-            const instructionHTML = imageSets[currentSet].instruction;
-            document.getElementById('instructions-text').innerHTML = instructionHTML;
+            document.getElementById('instructions-text').innerHTML = imageSets[currentSet].instruction;
             
             currentImageData.forEach((img, index) => {
                 const cell = document.createElement('div');
@@ -452,17 +446,12 @@
             });
         }
         
-        // Initialize on page load
         calculateCorrectAnswers();
         loadImages();
         
-        // Checkbox handler
         document.getElementById('robot-checkbox').addEventListener('change', function() {
             if (this.checked) {
-                // Show loading spinner
                 document.getElementById('loading-container').style.display = 'block';
-                
-                // After 1.5 seconds, show the image challenge
                 setTimeout(() => {
                     document.getElementById('checkbox-phase').style.display = 'none';
                     document.getElementById('captcha-task').style.display = 'block';
@@ -478,8 +467,6 @@
                 selectedImages.add(index);
                 cell.classList.add('selected');
             }
-            
-            // Hide error message when user makes changes
             document.getElementById('error-message').classList.remove('show');
         }
         
@@ -490,23 +477,17 @@
             const isCorrect = JSON.stringify(selectedArray) === JSON.stringify(correctArray);
             
             if (isCorrect) {
-                // Success!
                 document.getElementById('captcha-task').style.display = 'none';
                 document.getElementById('success-message').classList.add('show');
-                
-                // Store completion in localStorage
                 localStorage.setItem('captcha_completed', 'true');
                 localStorage.setItem('captcha_completion_time', Date.now());
             } else {
                 attempts++;
-                
-                // Show error message
                 const errorMsg = document.getElementById('error-message');
                 errorMsg.textContent = `Incorrect selection. Please try again. (Attempt ${attempts} of ${maxAttempts})`;
                 errorMsg.classList.add('show');
                 
                 if (attempts >= maxAttempts) {
-                    // After max attempts, show success anyway
                     setTimeout(() => {
                         document.getElementById('captcha-task').style.display = 'none';
                         document.getElementById('success-message').classList.add('show');
@@ -514,7 +495,6 @@
                         localStorage.setItem('captcha_completion_time', Date.now());
                     }, 2000);
                 } else {
-                    // Load next image set after delay
                     setTimeout(() => {
                         currentSet++;
                         if (currentSet < imageSets.length) {
@@ -528,7 +508,6 @@
             }
         });
         
-        // Record start time when page loads
         window.addEventListener('load', () => {
             localStorage.setItem('captcha_start_time', Date.now());
         });
