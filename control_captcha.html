@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>Mock reCAPTCHA v2 Image Challenge</title>
+    <title>Static Image CAPTCHA Demo</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -15,7 +15,7 @@
             border: 1px solid #ccc;
             border-radius: 8px;
             padding: 20px;
-            width: 320px;
+            width: 340px;
             text-align: center;
         }
         .captcha-grid {
@@ -45,18 +45,19 @@
 <body>
 
 <div class="captcha-container">
-    <h2>Mock CAPTCHA Challenge</h2>
+    <h2>CAPTCHA Challenge</h2>
     <p>Select all squares with <strong>traffic lights</strong></p>
     <div class="captcha-grid">
-        <img src="https://via.placeholder.com/100x100?text=Car" data-correct="0">
-        <img src="https://via.placeholder.com/100x100?text=Traffic" data-correct="1">
-        <img src="https://via.placeholder.com/100x100?text=Tree" data-correct="0">
-        <img src="https://via.placeholder.com/100x100?text=Traffic" data-correct="1">
-        <img src="https://via.placeholder.com/100x100?text=Dog" data-correct="0">
-        <img src="https://via.placeholder.com/100x100?text=Traffic" data-correct="1">
-        <img src="https://via.placeholder.com/100x100?text=House" data-correct="0">
-        <img src="https://via.placeholder.com/100x100?text=Traffic" data-correct="1">
-        <img src="https://via.placeholder.com/100x100?text=Bike" data-correct="0">
+        <!-- Real images from Unsplash public URLs -->
+        <img src="https://images.unsplash.com/photo-1581091012184-3b0d99da1ebc?crop=entropy&cs=tinysrgb&fit=crop&h=100&w=100" data-correct="1">
+        <img src="https://images.unsplash.com/photo-1504215680853-026ed2a45def?crop=entropy&cs=tinysrgb&fit=crop&h=100&w=100" data-correct="0">
+        <img src="https://images.unsplash.com/photo-1590080877303-489e2e53b6b1?crop=entropy&cs=tinysrgb&fit=crop&h=100&w=100" data-correct="0">
+        <img src="https://images.unsplash.com/photo-1595454099412-cb8b31f75030?crop=entropy&cs=tinysrgb&fit=crop&h=100&w=100" data-correct="1">
+        <img src="https://images.unsplash.com/photo-1600181957002-f177c7b1c24b?crop=entropy&cs=tinysrgb&fit=crop&h=100&w=100" data-correct="0">
+        <img src="https://images.unsplash.com/photo-1576992325464-3a5f2f3f9ec3?crop=entropy&cs=tinysrgb&fit=crop&h=100&w=100" data-correct="0">
+        <img src="https://images.unsplash.com/photo-1565372936354-cc9096c43db1?crop=entropy&cs=tinysrgb&fit=crop&h=100&w=100" data-correct="1">
+        <img src="https://images.unsplash.com/photo-1503023345310-bd7c1de61c7d?crop=entropy&cs=tinysrgb&fit=crop&h=100&w=100" data-correct="0">
+        <img src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?crop=entropy&cs=tinysrgb&fit=crop&h=100&w=100" data-correct="0">
     </div>
     <button onclick="checkCaptcha()">Submit</button>
     <p id="result"></p>
@@ -90,10 +91,6 @@ function checkCaptcha() {
 
 </body>
 </html>
-
-
-
-
 
 
 
