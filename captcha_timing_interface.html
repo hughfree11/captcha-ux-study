@@ -620,10 +620,10 @@
                     <p><strong>Note:</strong> This CAPTCHA system is unlabeled. Just complete it normally - we'll ask for your feedback afterward.</p>
                 </div>
                 
-                <a href="#" id="captcha1-link" class="captcha-button" target="_blank" onclick="startTimer1(); return true;">
+                <button class="captcha-button" id="captcha1-btn" onclick="openCaptcha1()">
                     <span class="status-indicator active"></span>
                     Open CAPTCHA System #1
-                </a>
+                </button>
                 
                 <div class="timer-display" id="timer1-display" style="display: none;">
                     <div class="label">Time Elapsed</div>
@@ -766,10 +766,10 @@
                     <p><strong>Note:</strong> This is a different CAPTCHA system. Complete it without comparing to the first one - we'll ask for comparisons later.</p>
                 </div>
                 
-                <a href="#" id="captcha2-link" class="captcha-button" target="_blank" onclick="startTimer2(); return true;">
+                <button class="captcha-button" id="captcha2-btn" onclick="openCaptcha2()">
                     <span class="status-indicator active"></span>
                     Open CAPTCHA System #2
-                </a>
+                </button>
                 
                 <div class="timer-display" id="timer2-display" style="display: none;">
                     <div class="label">Time Elapsed</div>
@@ -1149,8 +1149,26 @@
         }
         
         function startCaptchaTest1() {
-            document.getElementById('captcha1-link').href = CONFIG.captcha1Url;
             showPhase(2);
+        }
+        
+        function openCaptcha1() {
+            // Open the CAPTCHA in a new window
+            window.open(CONFIG.captcha1Url, '_blank');
+            
+            // Start the timer
+            if (!studyData.captcha1StartTime) {
+                studyData.captcha1StartTime = new Date();
+                document.getElementById('timer1-display').style.display = 'block';
+                document.getElementById('captcha1-complete-btn').disabled = false;
+                
+                let seconds = 0;
+                timer1Interval = setInterval(() => {
+                    seconds++;
+                    studyData.captcha1Time = seconds;
+                    document.getElementById('timer1-time').textContent = formatTime(seconds);
+                }, 1000);
+            }
         }
         
         function startTimer1() {
@@ -1186,8 +1204,26 @@
         }
         
         function startCaptchaTest2() {
-            document.getElementById('captcha2-link').href = CONFIG.captcha2Url;
             showPhase(4);
+        }
+        
+        function openCaptcha2() {
+            // Open the CAPTCHA in a new window
+            window.open(CONFIG.captcha2Url, '_blank');
+            
+            // Start the timer
+            if (!studyData.captcha2StartTime) {
+                studyData.captcha2StartTime = new Date();
+                document.getElementById('timer2-display').style.display = 'block';
+                document.getElementById('captcha2-complete-btn').disabled = false;
+                
+                let seconds = 0;
+                timer2Interval = setInterval(() => {
+                    seconds++;
+                    studyData.captcha2Time = seconds;
+                    document.getElementById('timer2-time').textContent = formatTime(seconds);
+                }, 1000);
+            }
         }
         
         function startTimer2() {
