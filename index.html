@@ -1153,23 +1153,32 @@
         }
         
         function openCaptcha1() {
-            // Open the CAPTCHA in a new window
-            window.open(CONFIG.captcha1Url, '_blank');
-            
-            // Start the timer
-            if (!studyData.captcha1StartTime) {
-                studyData.captcha1StartTime = new Date();
-                document.getElementById('timer1-display').style.display = 'block';
-                document.getElementById('captcha1-complete-btn').disabled = false;
-                
-                let seconds = 0;
-                timer1Interval = setInterval(() => {
-                    seconds++;
-                    studyData.captcha1Time = seconds;
-                    document.getElementById('timer1-time').textContent = formatTime(seconds);
-                }, 1000);
-            }
-        }
+    // Open the CAPTCHA in a new window
+    const captchaWindow = window.open(CONFIG.captcha1Url, '_blank');
+    
+    // Start the timer immediately
+    if (!studyData.captcha1StartTime) {
+        studyData.captcha1StartTime = new Date();
+        document.getElementById('timer1-display').style.display = 'block';
+        document.getElementById('captcha1-complete-btn').disabled = false;
+        
+        // Also remove any visual disabled styling
+        document.getElementById('captcha1-complete-btn').style.opacity = '1';
+        document.getElementById('captcha1-complete-btn').style.cursor = 'pointer';
+        
+        let seconds = 0;
+        timer1Interval = setInterval(() => {
+            seconds++;
+            studyData.captcha1Time = seconds;
+            document.getElementById('timer1-time').textContent = formatTime(seconds);
+        }, 1000);
+    }
+    
+    // If popup was blocked, alert the user
+    if (!captchaWindow || captchaWindow.closed || typeof captchaWindow.closed == 'undefined') {
+        alert('Please allow pop-ups for this site to open the CAPTCHA. Check your browser settings and try again.');
+    }
+}
         
         function startTimer1() {
             if (!studyData.captcha1StartTime) {
