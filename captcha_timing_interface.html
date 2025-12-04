@@ -1186,18 +1186,33 @@
             }
         }
         
-        function completeCaptcha1() {
-            clearInterval(timer1Interval);
-            document.getElementById('time1-display').textContent = formatTime(studyData.captcha1Time);
-            document.getElementById('time1-display-2').textContent = formatTime(studyData.captcha1Time);
-            
-            // Set survey link with data using proper Google Forms prefill format
-            const survey1Link = `${CONFIG.survey1.baseUrl}?usp=pp_url&${CONFIG.survey1.entries.participantId}=${encodeURIComponent(studyData.participantId)}&${CONFIG.survey1.entries.completionTime}=${studyData.captcha1Time}&${CONFIG.survey1.entries.systemNumber}=1`;
-            document.getElementById('survey1-link').href = survey1Link;
-            
-            showPhase(3);
-            saveToLocalStorage();
-        }
+        function openCaptcha1() {
+    // Open the CAPTCHA in a new window
+    const captchaWindow = window.open(CONFIG.captcha1Url, '_blank');
+    
+    // Start the timer immediately
+    if (!studyData.captcha1StartTime) {
+        studyData.captcha1StartTime = new Date();
+        document.getElementById('timer1-display').style.display = 'block';
+        document.getElementById('captcha1-complete-btn').disabled = false;
+        
+        // Also remove any visual disabled styling
+        document.getElementById('captcha1-complete-btn').style.opacity = '1';
+        document.getElementById('captcha1-complete-btn').style.cursor = 'pointer';
+        
+        let seconds = 0;
+        timer1Interval = setInterval(() => {
+            seconds++;
+            studyData.captcha1Time = seconds;
+            document.getElementById('timer1-time').textContent = formatTime(seconds);
+        }, 1000);
+    }
+    
+    // If popup was blocked, alert the user
+    if (!captchaWindow || captchaWindow.closed || typeof captchaWindow.closed == 'undefined') {
+        alert('Please allow pop-ups for this site to open the CAPTCHA. Check your browser settings and try again.');
+    }
+}
         
         function trackSurvey1Start() {
             // Optional: Track survey opens
