@@ -1034,23 +1034,47 @@
         // CONFIGURATION - UPDATE THESE LINKS
         // ============================================
         const CONFIG = {
-            // Pre-study survey (demographics, initial opinions)
-            preSurveyUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSeVmywSS3TivOWRViWfiW8qvvqdTE-CGjvcf8rWGa_WMqF8pg/viewform?usp=pp_url&entry.46101055=',
-            
-            // CAPTCHA links - ORDER WILL BE RANDOMIZED
-            captcha1Url: 'https://www.figma.com/proto/YZyDjTPklPsboxKfj7mqnT/captcha_prototype?node-id=62-3128&p=f&t=4odVLUG6Nzr386f4-1&scaling=min-zoom&content-scaling=fixed&page-id=62%3A2&starting-point-node-id=62%3A728',
-            captcha2Url: 'https://2captcha.com/demo/recaptcha-v2',
-            
-            // Individual feedback surveys (one after each CAPTCHA)
-            survey1Url: 'YOUR_FEEDBACK_SURVEY_1_GOOGLE_FORM_LINK',
-            survey2Url: 'YOUR_FEEDBACK_SURVEY_2_GOOGLE_FORM_LINK',
-            
-            // Final comparison survey
-            finalSurveyUrl: 'YOUR_FINAL_COMPARISON_GOOGLE_FORM_LINK',
-            
-            // Set to true to randomize which CAPTCHA is shown first
-            randomizeOrder: true
-        };
+    // Pre-study survey (demographics, initial opinions)
+    preSurveyUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSeVmywSS3TivOWRViWfiW8qvvqdTE-CGjvcf8rWGa_WMqF8pg/viewform?usp=pp_url&entry.46101055=',
+    
+    // CAPTCHA links - ORDER WILL BE RANDOMIZED
+    captcha1Url: 'https://www.figma.com/proto/YZyDjTPklPsboxKfj7mqnT/captcha_prototype?node-id=62-3128&p=f&t=4odVLUG6Nzr386f4-1&scaling=min-zoom&content-scaling=fixed&page-id=62%3A2&starting-point-node-id=62%3A728',
+    captcha2Url: 'https://2captcha.com/demo/recaptcha-v2',
+    
+    // Survey #1 - Feedback after first CAPTCHA
+    survey1: {
+        baseUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdR3uh2NI8ili-KVktE99ulpTcx2lLaTNaFAy9fY65V0mq7ew/viewform',
+        entries: {
+            participantId: 'entry.1477127587',
+            completionTime: 'entry.399166021',
+            systemNumber: 'entry.420919597'
+        }
+    },
+    
+    // Survey #2 - Feedback after second CAPTCHA
+    survey2: {
+        baseUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSfSe5KM7VMHm5adt3BLxszfupwkoWZrZY-vj54Az30twp7Vhw/viewform',
+        entries: {
+            participantId: 'entry.1375168536',
+            completionTime: 'entry.1292487416',
+            systemNumber: 'entry.564135907'
+        }
+    },
+    
+    // Final comparison survey
+    finalSurvey: {
+        baseUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSe-fPvmP2X7m6nav4J7GcWAlKwzy5hRV82MTiND_RbLcJHW5g/viewform',
+        entries: {
+            participantId: 'entry.121737447',
+            time1: 'entry.1648852332',
+            time2: 'entry.618787032',
+            randomized: 'entry.1212612871'
+        }
+    },
+    
+    // Set to true to randomize which CAPTCHA is shown first
+    randomizeOrder: true
+};
         
         // ============================================
         // STUDY DATA & LOGIC
