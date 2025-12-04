@@ -1183,7 +1183,10 @@ function completeCaptcha1() {
     document.getElementById('time1-display').textContent = formatTime(studyData.captcha1Time);
     document.getElementById('time1-display-2').textContent = formatTime(studyData.captcha1Time);
     
-    const survey1Link = `${CONFIG.survey1.baseUrl}?usp=pp_url&${CONFIG.survey1.entries.participantId}=${encodeURIComponent(studyData.participantId)}&${CONFIG.survey1.entries.completionTime}=${studyData.captcha1Time}&${CONFIG.survey1.entries.systemNumber}=1`;
+    // Determine which system this actually is (Figma=1, reCAPTCHA=2)
+    const systemNumber = CONFIG.captcha1Url.includes('figma.com') ? 1 : 2;
+    
+    const survey1Link = `${CONFIG.survey1.baseUrl}?usp=pp_url&${CONFIG.survey1.entries.participantId}=${encodeURIComponent(studyData.participantId)}&${CONFIG.survey1.entries.completionTime}=${studyData.captcha1Time}&${CONFIG.survey1.entries.systemNumber}=${systemNumber}`;
     document.getElementById('survey1-link').href = survey1Link;
     
     showPhase(3);
@@ -1228,7 +1231,10 @@ function completeCaptcha2() {
     clearInterval(timer2Interval);
     document.getElementById('time2-display').textContent = formatTime(studyData.captcha2Time);
     
-    const survey2Link = `${CONFIG.survey2.baseUrl}?usp=pp_url&${CONFIG.survey2.entries.participantId}=${encodeURIComponent(studyData.participantId)}&${CONFIG.survey2.entries.completionTime}=${studyData.captcha2Time}&${CONFIG.survey2.entries.systemNumber}=2`;
+    // Determine which system this actually is (Figma=1, reCAPTCHA=2)
+    const systemNumber = CONFIG.captcha2Url.includes('figma.com') ? 1 : 2;
+    
+    const survey2Link = `${CONFIG.survey2.baseUrl}?usp=pp_url&${CONFIG.survey2.entries.participantId}=${encodeURIComponent(studyData.participantId)}&${CONFIG.survey2.entries.completionTime}=${studyData.captcha2Time}&${CONFIG.survey2.entries.systemNumber}=${systemNumber}`;
     document.getElementById('survey2-link').href = survey2Link;
     
     showPhase(5);
