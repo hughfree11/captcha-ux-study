@@ -1075,274 +1075,232 @@
             // Set to true to randomize which CAPTCHA is shown first
             randomizeOrder: true
         };
-        
+
         // ============================================
-        // STUDY DATA & LOGIC
-        // ============================================
-        let studyData = {
-            participantId: '',
-            startTime: null,
-            captcha1Time: 0,
-            captcha2Time: 0,
-            captcha1StartTime: null,
-            captcha2StartTime: null,
-            orderRandomized: false,
-            captcha1IsTreatment: false // Will be set by randomization
-        };
-        
-        let timer1Interval, timer2Interval;
-        
-        // Generate unique participant ID
-        function generateParticipantId() {
-            const timestamp = Date.now().toString(36).toUpperCase();
-            const random = Math.random().toString(36).substring(2, 6).toUpperCase();
-            return `P-${timestamp}-${random}`;
-        }
-        
-        // Format time as MM:SS
-        function formatTime(seconds) {
-            const mins = Math.floor(seconds / 60);
-            const secs = seconds % 60;
-            return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-        }
-        
-        // Navigate between phases
-        function showPhase(phaseNum) {
-            document.querySelectorAll('.phase').forEach(phase => {
-                phase.classList.remove('active');
-            });
-            document.getElementById(`phase-${phaseNum}`).classList.add('active');
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
-        
-        // ============================================
-        // PHASE TRANSITIONS
-        // ============================================
-        
-        function startPreSurvey() {
-            studyData.participantId = generateParticipantId();
-            studyData.startTime = new Date();
-            
-            // Randomize CAPTCHA order if enabled
-            if (CONFIG.randomizeOrder && Math.random() < 0.5) {
-                studyData.orderRandomized = true;
-                studyData.captcha1IsTreatment = true;
-                // Swap the URLs
-                [CONFIG.captcha1Url, CONFIG.captcha2Url] = [CONFIG.captcha2Url, CONFIG.captcha1Url];
-            }
-            
-            // Update all participant ID displays
-            document.querySelectorAll('[id^="pid-display"]').forEach(el => {
-                el.textContent = studyData.participantId;
-            });
-            
-            // Set pre-survey link with participant ID
-            const preSurveyLink = `${CONFIG.preSurveyUrl}${encodeURIComponent(studyData.participantId)}`;
-            document.getElementById('pre-survey-link').href = preSurveyLink;
-            
-            showPhase(1);
-            saveToLocalStorage();
-        }
-        
-        function trackPreSurveyStart() {
-            // Optional: Track when they opened the survey
-        }
-        
-        function startCaptchaTest1() {
-            showPhase(2);
-        }
-        
-        function openCaptcha1() {
-    // Open the CAPTCHA in a new window
-    const captchaWindow = window.open(CONFIG.captcha1Url, '_blank');
+// STUDY DATA & LOGIC
+// ============================================
+let studyData = {
+    participantId: '',
+    startTime: null,
+    captcha1Time: 0,
+    captcha2Time: 0,
+    captcha1StartTime: null,
+    captcha2StartTime: null,
+    orderRandomized: false,
+    captcha1IsTreatment: false // Will be set by randomization
+};
+
+let timer1Interval, timer2Interval;
+
+// Generate unique participant ID
+function generateParticipantId() {
+    const timestamp = Date.now().toString(36).toUpperCase();
+    const random = Math.random().toString(36).substring(2, 6).toUpperCase();
+    return `P-${timestamp}-${random}`;
+}
+
+// Format time as MM:SS
+function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+}
+
+// Navigate between phases
+function showPhase(phaseNum) {
+    document.querySelectorAll('.phase').forEach(phase => {
+        phase.classList.remove('active');
+    });
+    document.getElementById(`phase-${phaseNum}`).classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ============================================
+// PHASE TRANSITIONS
+// ============================================
+
+function startPreSurvey() {
+    studyData.participantId = generateParticipantId();
+    studyData.startTime = new Date();
     
-    // Start the timer immediately
-    if (!studyData.captcha1StartTime) {
-        studyData.captcha1StartTime = new Date();
-        document.getElementById('timer1-display').style.display = 'block';
-        document.getElementById('captcha1-complete-btn').disabled = false;
-        
-        // Also remove any visual disabled styling
-        document.getElementById('captcha1-complete-btn').style.opacity = '1';
-        document.getElementById('captcha1-complete-btn').style.cursor = 'pointer';
-        
-        let seconds = 0;
-        timer1Interval = setInterval(() => {
-            seconds++;
-            studyData.captcha1Time = seconds;
-            document.getElementById('timer1-time').textContent = formatTime(seconds);
-        }, 1000);
+    // Randomize CAPTCHA order if enabled
+    if (CONFIG.randomizeOrder && Math.random() < 0.5) {
+        studyData.orderRandomized = true;
+        studyData.captcha1IsTreatment = true;
+        // Swap the URLs
+        [CONFIG.captcha1Url, CONFIG.captcha2Url] = [CONFIG.captcha2Url, CONFIG.captcha1Url];
     }
     
-    // If popup was blocked, alert the user
+    // Update all participant ID displays
+    document.querySelectorAll('[id^="pid-display"]').forEach(el => {
+        el.textContent = studyData.participantId;
+    });
+    
+    // Set pre-survey link with participant ID
+    const preSurveyLink = `${CONFIG.preSurveyUrl}${encodeURIComponent(studyData.participantId)}`;
+    document.getElementById('pre-survey-link').href = preSurveyLink;
+    
+    showPhase(1);
+    saveToLocalStorage();
+}
+
+function trackPreSurveyStart() {
+    // Optional: Track when they opened the survey
+}
+
+function startCaptchaTest1() {
+    showPhase(2);
+}
+
+function openCaptcha1() {
+    console.log("Opening CAPTCHA 1");
+    const captchaWindow = window.open(CONFIG.captcha1Url, '_blank');
+    
+    studyData.captcha1StartTime = new Date();
+    document.getElementById('timer1-display').style.display = 'block';
+    
+    const btn = document.getElementById('captcha1-complete-btn');
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.style.cursor = 'pointer';
+    
+    if (timer1Interval) clearInterval(timer1Interval);
+    
+    let seconds = 0;
+    timer1Interval = setInterval(() => {
+        seconds++;
+        studyData.captcha1Time = seconds;
+        document.getElementById('timer1-time').textContent = formatTime(seconds);
+    }, 1000);
+    
     if (!captchaWindow || captchaWindow.closed || typeof captchaWindow.closed == 'undefined') {
         alert('Please allow pop-ups for this site to open the CAPTCHA. Check your browser settings and try again.');
     }
 }
-        
-        function startTimer1() {
-            if (!studyData.captcha1StartTime) {
-                studyData.captcha1StartTime = new Date();
-                document.getElementById('timer1-display').style.display = 'block';
-                document.getElementById('captcha1-complete-btn').disabled = false;
-                
-                let seconds = 0;
-                timer1Interval = setInterval(() => {
-                    seconds++;
-                    studyData.captcha1Time = seconds;
-                    document.getElementById('timer1-time').textContent = formatTime(seconds);
-                }, 1000);
-            }
-        }
-        
-        function openCaptcha1() {
-    // Open the CAPTCHA in a new window
-    const captchaWindow = window.open(CONFIG.captcha1Url, '_blank');
+
+function completeCaptcha1() {
+    clearInterval(timer1Interval);
+    document.getElementById('time1-display').textContent = formatTime(studyData.captcha1Time);
+    document.getElementById('time1-display-2').textContent = formatTime(studyData.captcha1Time);
     
-    // Start the timer immediately
-    if (!studyData.captcha1StartTime) {
-        studyData.captcha1StartTime = new Date();
-        document.getElementById('timer1-display').style.display = 'block';
-        document.getElementById('captcha1-complete-btn').disabled = false;
-        
-        // Also remove any visual disabled styling
-        document.getElementById('captcha1-complete-btn').style.opacity = '1';
-        document.getElementById('captcha1-complete-btn').style.cursor = 'pointer';
-        
-        let seconds = 0;
-        timer1Interval = setInterval(() => {
-            seconds++;
-            studyData.captcha1Time = seconds;
-            document.getElementById('timer1-time').textContent = formatTime(seconds);
-        }, 1000);
-    }
+    const survey1Link = `${CONFIG.survey1.baseUrl}?usp=pp_url&${CONFIG.survey1.entries.participantId}=${encodeURIComponent(studyData.participantId)}&${CONFIG.survey1.entries.completionTime}=${studyData.captcha1Time}&${CONFIG.survey1.entries.systemNumber}=1`;
+    document.getElementById('survey1-link').href = survey1Link;
     
-    // If popup was blocked, alert the user
+    showPhase(3);
+    saveToLocalStorage();
+}
+
+function trackSurvey1Start() {
+    // Optional: Track survey opens
+}
+
+function startCaptchaTest2() {
+    showPhase(4);
+}
+
+function openCaptcha2() {
+    console.log("Opening CAPTCHA 2");
+    const captchaWindow = window.open(CONFIG.captcha2Url, '_blank');
+    
+    studyData.captcha2StartTime = new Date();
+    document.getElementById('timer2-display').style.display = 'block';
+    
+    const btn = document.getElementById('captcha2-complete-btn');
+    btn.disabled = false;
+    btn.style.opacity = '1';
+    btn.style.cursor = 'pointer';
+    
+    if (timer2Interval) clearInterval(timer2Interval);
+    
+    let seconds = 0;
+    timer2Interval = setInterval(() => {
+        seconds++;
+        studyData.captcha2Time = seconds;
+        document.getElementById('timer2-time').textContent = formatTime(seconds);
+    }, 1000);
+    
     if (!captchaWindow || captchaWindow.closed || typeof captchaWindow.closed == 'undefined') {
         alert('Please allow pop-ups for this site to open the CAPTCHA. Check your browser settings and try again.');
     }
 }
-        
-        function trackSurvey1Start() {
-            // Optional: Track survey opens
-        }
-        
-        function startCaptchaTest2() {
-            showPhase(4);
-        }
-        
-        function openCaptcha2() {
-            // Open the CAPTCHA in a new window
-            window.open(CONFIG.captcha2Url, '_blank');
-            
-            // Start the timer
-            if (!studyData.captcha2StartTime) {
-                studyData.captcha2StartTime = new Date();
-                document.getElementById('timer2-display').style.display = 'block';
-                document.getElementById('captcha2-complete-btn').disabled = false;
-                
-                let seconds = 0;
-                timer2Interval = setInterval(() => {
-                    seconds++;
-                    studyData.captcha2Time = seconds;
-                    document.getElementById('timer2-time').textContent = formatTime(seconds);
-                }, 1000);
-            }
-        }
-        
-        function startTimer2() {
-            if (!studyData.captcha2StartTime) {
-                studyData.captcha2StartTime = new Date();
-                document.getElementById('timer2-display').style.display = 'block';
-                document.getElementById('captcha2-complete-btn').disabled = false;
-                
-                let seconds = 0;
-                timer2Interval = setInterval(() => {
-                    seconds++;
-                    studyData.captcha2Time = seconds;
-                    document.getElementById('timer2-time').textContent = formatTime(seconds);
-                }, 1000);
-            }
-        }
-        
-        function completeCaptcha2() {
-            clearInterval(timer2Interval);
-            document.getElementById('time2-display').textContent = formatTime(studyData.captcha2Time);
-            
-            // Set survey link with data using proper Google Forms prefill format
-            const survey2Link = `${CONFIG.survey2.baseUrl}?usp=pp_url&${CONFIG.survey2.entries.participantId}=${encodeURIComponent(studyData.participantId)}&${CONFIG.survey2.entries.completionTime}=${studyData.captcha2Time}&${CONFIG.survey2.entries.systemNumber}=2`;
-            document.getElementById('survey2-link').href = survey2Link;
-            
-            showPhase(5);
-            saveToLocalStorage();
-        }
-        
-        function trackSurvey2Start() {
-            // Optional: Track survey opens
-        }
-        
-        function showFinalSurvey() {
-            document.getElementById('time1-display-final').textContent = formatTime(studyData.captcha1Time);
-            document.getElementById('time2-display-final').textContent = formatTime(studyData.captcha2Time);
-            
-            const diff = studyData.captcha2Time - studyData.captcha1Time;
-            const diffText = diff > 0 
-                ? `+${formatTime(Math.abs(diff))} (System #2 slower)`
-                : `-${formatTime(Math.abs(diff))} (System #2 faster)`;
-            document.getElementById('time-diff-display').textContent = diffText;
-            
-            // Set final survey link with all data using proper Google Forms prefill format
-            const finalLink = `${CONFIG.finalSurvey.baseUrl}?usp=pp_url&${CONFIG.finalSurvey.entries.participantId}=${encodeURIComponent(studyData.participantId)}&${CONFIG.finalSurvey.entries.time1}=${studyData.captcha1Time}&${CONFIG.finalSurvey.entries.time2}=${studyData.captcha2Time}&${CONFIG.finalSurvey.entries.randomized}=${studyData.orderRandomized}`;
-            document.getElementById('final-survey-link').href = finalLink;
-            
-            showPhase(6);
-        }
-        
-        function trackFinalSurveyStart() {
-            // Optional: Track final survey
-        }
-        
-        function showThankYou() {
-            const endTime = new Date();
-            const totalMinutes = Math.round((endTime - studyData.startTime) / 60000);
-            
-            document.getElementById('final-time1').textContent = formatTime(studyData.captcha1Time);
-            document.getElementById('final-time2').textContent = formatTime(studyData.captcha2Time);
-            document.getElementById('total-duration').textContent = `${totalMinutes} minutes`;
-            document.getElementById('pid-display-final').textContent = studyData.participantId;
-            
-            showPhase(7);
-            saveToLocalStorage();
-        }
-        
-        // ============================================
-        // DATA PERSISTENCE
-        // ============================================
-        
-        function saveToLocalStorage() {
-            localStorage.setItem('captchaStudyData', JSON.stringify(studyData));
-        }
-        
-        function loadFromLocalStorage() {
-            const saved = localStorage.getItem('captchaStudyData');
-            if (saved) {
-                studyData = JSON.parse(saved);
-                // Could restore state here if needed
-            }
-        }
-        
-        // Load saved data on page load
-        window.addEventListener('load', () => {
-            loadFromLocalStorage();
-        });
-        
-        // Warn before leaving if study in progress
-        window.addEventListener('beforeunload', (e) => {
-            if (studyData.participantId && !document.getElementById('phase-7').classList.contains('active')) {
-                e.preventDefault();
-                e.returnValue = '';
-            }
-        });
+
+function completeCaptcha2() {
+    clearInterval(timer2Interval);
+    document.getElementById('time2-display').textContent = formatTime(studyData.captcha2Time);
+    
+    const survey2Link = `${CONFIG.survey2.baseUrl}?usp=pp_url&${CONFIG.survey2.entries.participantId}=${encodeURIComponent(studyData.participantId)}&${CONFIG.survey2.entries.completionTime}=${studyData.captcha2Time}&${CONFIG.survey2.entries.systemNumber}=2`;
+    document.getElementById('survey2-link').href = survey2Link;
+    
+    showPhase(5);
+    saveToLocalStorage();
+}
+
+function trackSurvey2Start() {
+    // Optional: Track survey opens
+}
+
+function showFinalSurvey() {
+    document.getElementById('time1-display-final').textContent = formatTime(studyData.captcha1Time);
+    document.getElementById('time2-display-final').textContent = formatTime(studyData.captcha2Time);
+    
+    const diff = studyData.captcha2Time - studyData.captcha1Time;
+    const diffText = diff > 0 
+        ? `+${formatTime(Math.abs(diff))} (System #2 slower)`
+        : `-${formatTime(Math.abs(diff))} (System #2 faster)`;
+    document.getElementById('time-diff-display').textContent = diffText;
+    
+    const finalLink = `${CONFIG.finalSurvey.baseUrl}?usp=pp_url&${CONFIG.finalSurvey.entries.participantId}=${encodeURIComponent(studyData.participantId)}&${CONFIG.finalSurvey.entries.time1}=${studyData.captcha1Time}&${CONFIG.finalSurvey.entries.time2}=${studyData.captcha2Time}&${CONFIG.finalSurvey.entries.randomized}=${studyData.orderRandomized}`;
+    document.getElementById('final-survey-link').href = finalLink;
+    
+    showPhase(6);
+}
+
+function trackFinalSurveyStart() {
+    // Optional: Track final survey
+}
+
+function showThankYou() {
+    const endTime = new Date();
+    const totalMinutes = Math.round((endTime - studyData.startTime) / 60000);
+    
+    document.getElementById('final-time1').textContent = formatTime(studyData.captcha1Time);
+    document.getElementById('final-time2').textContent = formatTime(studyData.captcha2Time);
+    document.getElementById('total-duration').textContent = `${totalMinutes} minutes`;
+    document.getElementById('pid-display-final').textContent = studyData.participantId;
+    
+    showPhase(7);
+    saveToLocalStorage();
+}
+
+// ============================================
+// DATA PERSISTENCE
+// ============================================
+
+function saveToLocalStorage() {
+    localStorage.setItem('captchaStudyData', JSON.stringify(studyData));
+}
+
+function loadFromLocalStorage() {
+    const saved = localStorage.getItem('captchaStudyData');
+    if (saved) {
+        studyData = JSON.parse(saved);
+        // Could restore state here if needed
+    }
+}
+
+// Load saved data on page load
+window.addEventListener('load', () => {
+    loadFromLocalStorage();
+});
+
+// Warn before leaving if study in progress
+window.addEventListener('beforeunload', (e) => {
+    if (studyData.participantId && !document.getElementById('phase-7').classList.contains('active')) {
+        e.preventDefault();
+        e.returnValue = '';
+    }
+});
     </script>
 </body>
-</html>
+</html>    
+        
