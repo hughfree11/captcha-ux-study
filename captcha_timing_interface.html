@@ -555,7 +555,7 @@
                 
                 <p><strong>Estimated time:</strong> 3 minutes</p>
                 
-                <a href="#" id="pre-survey-link" class="btn btn-large" target="_blank" onclick="trackPreSurveyStart()">
+                <a href="#" id="pre-survey-link" class="btn btn-large" target="_blank" onclick="trackPreSurveyStart(); return true;">
                     Open Pre-Study Survey →
                 </a>
                 
@@ -620,7 +620,7 @@
                     <p><strong>Note:</strong> This CAPTCHA system is unlabeled. Just complete it normally - we'll ask for your feedback afterward.</p>
                 </div>
                 
-                <a href="#" id="captcha1-link" class="captcha-button" target="_blank" onclick="startTimer1()">
+                <a href="#" id="captcha1-link" class="captcha-button" target="_blank" onclick="startTimer1(); return true;">
                     <span class="status-indicator active"></span>
                     Open CAPTCHA System #1
                 </a>
@@ -701,7 +701,7 @@
                     <p><strong>Important:</strong> Your completion time will be automatically included in this survey.</p>
                 </div>
                 
-                <a href="#" id="survey1-link" class="btn btn-large" target="_blank" onclick="trackSurvey1Start()">
+                <a href="#" id="survey1-link" class="btn btn-large" target="_blank" onclick="trackSurvey1Start(); return true;">
                     Open Feedback Survey #1 →
                 </a>
                 
@@ -766,7 +766,7 @@
                     <p><strong>Note:</strong> This is a different CAPTCHA system. Complete it without comparing to the first one - we'll ask for comparisons later.</p>
                 </div>
                 
-                <a href="#" id="captcha2-link" class="captcha-button" target="_blank" onclick="startTimer2()">
+                <a href="#" id="captcha2-link" class="captcha-button" target="_blank" onclick="startTimer2(); return true;">
                     <span class="status-indicator active"></span>
                     Open CAPTCHA System #2
                 </a>
@@ -847,7 +847,7 @@
                 
                 <p><strong>Estimated time:</strong> 2 minutes</p>
                 
-                <a href="#" id="survey2-link" class="btn btn-large" target="_blank" onclick="trackSurvey2Start()">
+                <a href="#" id="survey2-link" class="btn btn-large" target="_blank" onclick="trackSurvey2Start(); return true;">
                     Open Feedback Survey #2 →
                 </a>
                 
@@ -879,7 +879,7 @@
                     </div>
                     <div class="step active">
                         <div class="step-circle">4</div>
-                        <div class="step-label">Complete</div>
+                        <div class="step-circle">Complete</div>
                     </div>
                 </div>
                 
@@ -931,7 +931,7 @@
                     <p><strong>Thank you for your time!</strong> This final survey completes your participation in the study.</p>
                 </div>
                 
-                <a href="#" id="final-survey-link" class="btn btn-large" target="_blank" onclick="trackFinalSurveyStart()">
+                <a href="#" id="final-survey-link" class="btn btn-large" target="_blank" onclick="trackFinalSurveyStart(); return true;">
                     Open Final Comparison Survey →
                 </a>
                 
@@ -1034,47 +1034,47 @@
         // CONFIGURATION - UPDATE THESE LINKS
         // ============================================
         const CONFIG = {
-    // Pre-study survey (demographics, initial opinions)
-    preSurveyUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSeVmywSS3TivOWRViWfiW8qvvqdTE-CGjvcf8rWGa_WMqF8pg/viewform?usp=pp_url&entry.46101055=',
-    
-    // CAPTCHA links - ORDER WILL BE RANDOMIZED
-    captcha1Url: 'https://www.figma.com/proto/YZyDjTPklPsboxKfj7mqnT/captcha_prototype?node-id=62-3128&p=f&t=4odVLUG6Nzr386f4-1&scaling=min-zoom&content-scaling=fixed&page-id=62%3A2&starting-point-node-id=62%3A728',
-    captcha2Url: 'https://2captcha.com/demo/recaptcha-v2',
-    
-    // Survey #1 - Feedback after first CAPTCHA
-    survey1: {
-        baseUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdR3uh2NI8ili-KVktE99ulpTcx2lLaTNaFAy9fY65V0mq7ew/viewform',
-        entries: {
-            participantId: 'entry.1477127587',
-            completionTime: 'entry.399166021',
-            systemNumber: 'entry.420919597'
-        }
-    },
-    
-    // Survey #2 - Feedback after second CAPTCHA
-    survey2: {
-        baseUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSfSe5KM7VMHm5adt3BLxszfupwkoWZrZY-vj54Az30twp7Vhw/viewform',
-        entries: {
-            participantId: 'entry.1375168536',
-            completionTime: 'entry.1292487416',
-            systemNumber: 'entry.564135907'
-        }
-    },
-    
-    // Final comparison survey
-    finalSurvey: {
-        baseUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSe-fPvmP2X7m6nav4J7GcWAlKwzy5hRV82MTiND_RbLcJHW5g/viewform',
-        entries: {
-            participantId: 'entry.121737447',
-            time1: 'entry.1648852332',
-            time2: 'entry.618787032',
-            randomized: 'entry.1212612871'
-        }
-    },
-    
-    // Set to true to randomize which CAPTCHA is shown first
-    randomizeOrder: true
-};
+            // Pre-study survey (demographics, initial opinions)
+            preSurveyUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSeVmywSS3TivOWRViWfiW8qvvqdTE-CGjvcf8rWGa_WMqF8pg/viewform?usp=pp_url&entry.46101055=',
+            
+            // CAPTCHA links - ORDER WILL BE RANDOMIZED
+            captcha1Url: 'https://www.figma.com/proto/YZyDjTPklPsboxKfj7mqnT/captcha_prototype?node-id=62-3128&p=f&t=4odVLUG6Nzr386f4-1&scaling=min-zoom&content-scaling=fixed&page-id=62%3A2&starting-point-node-id=62%3A728',
+            captcha2Url: 'https://2captcha.com/demo/recaptcha-v2',
+            
+            // Survey #1 - Feedback after first CAPTCHA
+            survey1: {
+                baseUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSdR3uh2NI8ili-KVktE99ulpTcx2lLaTNaFAy9fY65V0mq7ew/viewform',
+                entries: {
+                    participantId: 'entry.1477127587',
+                    completionTime: 'entry.399166021',
+                    systemNumber: 'entry.420919597'
+                }
+            },
+            
+            // Survey #2 - Feedback after second CAPTCHA
+            survey2: {
+                baseUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSfSe5KM7VMHm5adt3BLxszfupwkoWZrZY-vj54Az30twp7Vhw/viewform',
+                entries: {
+                    participantId: 'entry.1375168536',
+                    completionTime: 'entry.1292487416',
+                    systemNumber: 'entry.564135907'
+                }
+            },
+            
+            // Final comparison survey
+            finalSurvey: {
+                baseUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSe-fPvmP2X7m6nav4J7GcWAlKwzy5hRV82MTiND_RbLcJHW5g/viewform',
+                entries: {
+                    participantId: 'entry.121737447',
+                    time1: 'entry.1648852332',
+                    time2: 'entry.618787032',
+                    randomized: 'entry.1212612871'
+                }
+            },
+            
+            // Set to true to randomize which CAPTCHA is shown first
+            randomizeOrder: true
+        };
         
         // ============================================
         // STUDY DATA & LOGIC
@@ -1137,7 +1137,7 @@
             });
             
             // Set pre-survey link with participant ID
-            const preSurveyLink = `${CONFIG.preSurveyUrl}?entry.pid=${encodeURIComponent(studyData.participantId)}`;
+            const preSurveyLink = `${CONFIG.preSurveyUrl}${encodeURIComponent(studyData.participantId)}`;
             document.getElementById('pre-survey-link').href = preSurveyLink;
             
             showPhase(1);
@@ -1154,7 +1154,6 @@
         }
         
         function startTimer1() {
-            document.getElementById('captcha1-link').href = CONFIG.captcha1Url;
             if (!studyData.captcha1StartTime) {
                 studyData.captcha1StartTime = new Date();
                 document.getElementById('timer1-display').style.display = 'block';
@@ -1174,8 +1173,8 @@
             document.getElementById('time1-display').textContent = formatTime(studyData.captcha1Time);
             document.getElementById('time1-display-2').textContent = formatTime(studyData.captcha1Time);
             
-            // Set survey link with data
-            const survey1Link = `${CONFIG.survey1Url}?entry.pid=${encodeURIComponent(studyData.participantId)}&entry.time=${studyData.captcha1Time}&entry.system=1`;
+            // Set survey link with data using proper Google Forms prefill format
+            const survey1Link = `${CONFIG.survey1.baseUrl}?usp=pp_url&${CONFIG.survey1.entries.participantId}=${encodeURIComponent(studyData.participantId)}&${CONFIG.survey1.entries.completionTime}=${studyData.captcha1Time}&${CONFIG.survey1.entries.systemNumber}=1`;
             document.getElementById('survey1-link').href = survey1Link;
             
             showPhase(3);
@@ -1192,7 +1191,6 @@
         }
         
         function startTimer2() {
-            document.getElementById('captcha2-link').href = CONFIG.captcha2Url;
             if (!studyData.captcha2StartTime) {
                 studyData.captcha2StartTime = new Date();
                 document.getElementById('timer2-display').style.display = 'block';
@@ -1211,8 +1209,8 @@
             clearInterval(timer2Interval);
             document.getElementById('time2-display').textContent = formatTime(studyData.captcha2Time);
             
-            // Set survey link with data
-            const survey2Link = `${CONFIG.survey2Url}?entry.pid=${encodeURIComponent(studyData.participantId)}&entry.time=${studyData.captcha2Time}&entry.system=2`;
+            // Set survey link with data using proper Google Forms prefill format
+            const survey2Link = `${CONFIG.survey2.baseUrl}?usp=pp_url&${CONFIG.survey2.entries.participantId}=${encodeURIComponent(studyData.participantId)}&${CONFIG.survey2.entries.completionTime}=${studyData.captcha2Time}&${CONFIG.survey2.entries.systemNumber}=2`;
             document.getElementById('survey2-link').href = survey2Link;
             
             showPhase(5);
@@ -1233,8 +1231,8 @@
                 : `-${formatTime(Math.abs(diff))} (System #2 faster)`;
             document.getElementById('time-diff-display').textContent = diffText;
             
-            // Set final survey link with all data
-            const finalLink = `${CONFIG.finalSurveyUrl}?entry.pid=${encodeURIComponent(studyData.participantId)}&entry.time1=${studyData.captcha1Time}&entry.time2=${studyData.captcha2Time}&entry.randomized=${studyData.orderRandomized}`;
+            // Set final survey link with all data using proper Google Forms prefill format
+            const finalLink = `${CONFIG.finalSurvey.baseUrl}?usp=pp_url&${CONFIG.finalSurvey.entries.participantId}=${encodeURIComponent(studyData.participantId)}&${CONFIG.finalSurvey.entries.time1}=${studyData.captcha1Time}&${CONFIG.finalSurvey.entries.time2}=${studyData.captcha2Time}&${CONFIG.finalSurvey.entries.randomized}=${studyData.orderRandomized}`;
             document.getElementById('final-survey-link').href = finalLink;
             
             showPhase(6);
