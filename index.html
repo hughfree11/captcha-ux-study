@@ -610,6 +610,7 @@
                     <ol style="margin-left: 20px;">
                         <li>Click the button below to open the CAPTCHA system</li>
                         <li>Complete the CAPTCHA as you normally would</li>
+                        <li id="v2-instruction-1" style="display: none;"><strong>IMPORTANT: Click the "Reset" button before completing the CAPTCHA</strong></li>
                         <li><strong>The timer starts automatically</strong> when you click the button</li>
                         <li>Return to this page when you're done</li>
                         <li>Click "I've Completed It" to continue</li>
@@ -756,6 +757,7 @@
                     <ol style="margin-left: 20px;">
                         <li>Click the button below to open the second CAPTCHA system</li>
                         <li>Complete the CAPTCHA as you normally would</li>
+                        <li id="v2-instruction-2" style="display: none;"><strong>IMPORTANT: Click the "Reset" button before completing the CAPTCHA</strong></li>
                         <li><strong>The timer starts automatically</strong> when you click the button</li>
                         <li>Return to this page when you're done</li>
                         <li>Click "I've Completed It" to continue</li>
@@ -1153,10 +1155,20 @@
                 'Go to Figma CAPTCHA' : 'Go to v2 CAPTCHA';
             document.getElementById('captcha1-btn-text').textContent = captcha1Text;
             
+            // Show v2 instruction for CAPTCHA 1 if it's v2
+            if (!CONFIG.captcha1Url.includes('figma.com')) {
+                document.getElementById('v2-instruction-1').style.display = 'list-item';
+            }
+            
             // Update CAPTCHA 2 button text
             const captcha2Text = CONFIG.captcha2Url.includes('figma.com') ? 
                 'Go to Figma CAPTCHA' : 'Go to v2 CAPTCHA';
             document.getElementById('captcha2-btn-text').textContent = captcha2Text;
+            
+            // Show v2 instruction for CAPTCHA 2 if it's v2
+            if (!CONFIG.captcha2Url.includes('figma.com')) {
+                document.getElementById('v2-instruction-2').style.display = 'list-item';
+            }
         }
 
         function trackPreSurveyStart() {
