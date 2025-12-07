@@ -1,6 +1,3 @@
-Captcha test · HTML
-Copy
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -1069,11 +1066,9 @@ Copy
                 baseUrl: 'https://docs.google.com/forms/d/e/1FAIpQLSe-fPvmP2X7m6nav4J7GcWAlKwzy5hRV82MTiND_RbLcJHW5g/viewform',
                 entries: {
                     participantId: 'entry.121737447',
-                    time1: 'entry.1648852332',
-                    time2: 'entry.618787032',
-                    randomized: 'entry.1212612871',
-                    system1Type: 'entry.XXXXX',  // ADD YOUR ENTRY ID HERE - for "Which system was shown first?"
-                    system2Type: 'entry.YYYYY'   // ADD YOUR ENTRY ID HERE - for "Which system was shown second?"
+                    figmaTime: 'entry.1648852332',
+                    v2Time: 'entry.618787032',
+                    randomized: 'entry.1212612871'
                 }
             },
             
@@ -1278,13 +1273,17 @@ Copy
             // Determine the randomization status (Yes/No instead of true/false)
             const randomizedValue = studyData.orderRandomized ? 'Yes' : 'No';
             
-            // Determine which system was which
-            // System #1 in order = whatever was shown first
-            // System #2 in order = whatever was shown second
-            const system1Type = CONFIG.captcha1Url.includes('figma.com') ? 'Figma' : 'reCAPTCHA';
-            const system2Type = CONFIG.captcha2Url.includes('figma.com') ? 'Figma' : 'reCAPTCHA';
+            // Calculate Figma and v2 times based on which URL is which
+            let figmaTime, v2Time;
+            if (CONFIG.captcha1Url.includes('figma.com')) {
+                figmaTime = studyData.captcha1Time;
+                v2Time = studyData.captcha2Time;
+            } else {
+                figmaTime = studyData.captcha2Time;
+                v2Time = studyData.captcha1Time;
+            }
             
-            const finalLink = `${CONFIG.finalSurvey.baseUrl}?usp=pp_url&${CONFIG.finalSurvey.entries.participantId}=${encodeURIComponent(studyData.participantId)}&${CONFIG.finalSurvey.entries.time1}=${studyData.captcha1Time}&${CONFIG.finalSurvey.entries.time2}=${studyData.captcha2Time}&${CONFIG.finalSurvey.entries.randomized}=${encodeURIComponent(randomizedValue)}&${CONFIG.finalSurvey.entries.system1Type}=${encodeURIComponent(system1Type)}&${CONFIG.finalSurvey.entries.system2Type}=${encodeURIComponent(system2Type)}`;
+            const finalLink = `${CONFIG.finalSurvey.baseUrl}?usp=pp_url&${CONFIG.finalSurvey.entries.participantId}=${encodeURIComponent(studyData.participantId)}&${CONFIG.finalSurvey.entries.figmaTime}=${figmaTime}&${CONFIG.finalSurvey.entries.v2Time}=${v2Time}&${CONFIG.finalSurvey.entries.randomized}=${encodeURIComponent(randomizedValue)}`;
             document.getElementById('final-survey-link').href = finalLink;
             
             showPhase(6);
